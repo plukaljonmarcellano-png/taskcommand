@@ -95,7 +95,7 @@ const {useState,useEffect,useCallback,useRef,useMemo,createContext,useContext,Fr
 /* ═══════════════════════════════════════════════════════════════════
    CONSTANTS
    ═══════════════════════════════════════════════════════════════════ */
-const APP_VERSION = "2.0.2";
+const APP_VERSION = "2.0.3";
 const SECTIONS = ["active","waiting","someday","done"];
 const SECTION_META = {
   active:  {label:"Active",     color:"#7c6df0", raw:"124,109,240", icon:"▶"},
@@ -1978,8 +1978,9 @@ function DomainModal({open, onClose, onAdd, onUpdate, onRemove}) {
    SETTINGS MODAL
    ═══════════════════════════════════════════════════════════════════ */
 function SettingsModal({open, onClose, onSignOut, onReconfigureFirebase, onManagePeople, onManageDomains, exportBackup, exportCsv, theme, setTheme}) {
-  const {user, tasks, projects, people, domains, save, data, confirm, toast} = useApp();
+  const {user, tasks, projects, people, domains, savedViews, save, data, confirm, toast} = useApp();
   const importRef = useRef(null);
+  const mergeRef = useRef(null);
   const doImport = (e) => {
     const f = e.target.files[0];
     if (!f) return;
@@ -1993,6 +1994,59 @@ function SettingsModal({open, onClose, onSignOut, onReconfigureFirebase, onManag
         toast("Backup imported", {type:"success"});
         onClose();
       } catch (err) { toast("Import failed: "+err.message, {type:"error"}); }
+    };
+    r.readAsText(f);
+    e.target.value = "";
+  };
+  const doMerge = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = async () => {
+      try {
+        const parsed = JSON.parse(r.result);
+        if (!parsed.tasks || !Array.isArray(parsed.tasks)) throw new Error("Pack must contain a 'tasks' array");
+        const newTasks = parsed.tasks;
+        const newProjects = parsed.projects || [];
+        const newDomains = parsed.domains || [];
+        const newPeople = parsed.people || [];
+        const newViews = parsed.savedViews || [];
+        // Dedupe: skip anything whose id or (for projects/domains/people/views) name already exists
+        const existingTaskIds = new Set(tasks.map(t => t.id));
+        const existingProjectNames = new Set(projects.map(p => p.name.toLowerCase()));
+        const existingDomainNames = new Set(domains.map(d => d.name.toLowerCase()));
+        const existingPeople = new Set(people.map(p => p.toLowerCase()));
+        const existingViewNames = new Set(savedViews.map(v => v.name.toLowerCase()));
+        const addTasks = newTasks.filter(t => !existingTaskIds.has(t.id)).map(t => ({...t, id: t.id || uid()}));
+        const addProjects = newProjects.filter(p => !existingProjectNames.has((p.name||"").toLowerCase())).map(p => ({...p, id: p.id || uid()}));
+        const addDomains = newDomains.filter(d => !existingDomainNames.has((d.name||"").toLowerCase()));
+        const addPeople = newPeople.filter(p => !existingPeople.has((p||"").toLowerCase()));
+        const addViews = newViews.filter(v => !existingViewNames.has((v.name||"").toLowerCase())).map(v => ({...v, id: v.id || uid()}));
+        const summary = [
+          `${addTasks.length} task${addTasks.length!==1?"s":""}`,
+          addProjects.length ? `${addProjects.length} project${addProjects.length!==1?"s":""}` : null,
+          addDomains.length ? `${addDomains.length} domain${addDomains.length!==1?"s":""}` : null,
+          addPeople.length ? `${addPeople.length} member${addPeople.length!==1?"s":""}` : null,
+          addViews.length ? `${addViews.length} saved view${addViews.length!==1?"s":""}` : null
+        ].filter(Boolean).join(", ");
+        const skipped = newTasks.length - addTasks.length;
+        if (addTasks.length === 0 && addProjects.length === 0 && addDomains.length === 0 && addPeople.length === 0 && addViews.length === 0) {
+          toast("Nothing to merge — all items already exist", {type:"info"}); return;
+        }
+        if (!await confirm({title:"Merge pack?", message:`Add ${summary} to your existing workspace? ${skipped>0?`(${skipped} duplicate task${skipped!==1?"s":""} will be skipped.)`:""} Existing data is preserved.`})) return;
+        const merged = {
+          ...data,
+          tasks: [...tasks, ...addTasks],
+          projects: [...projects, ...addProjects],
+          domains: [...domains, ...addDomains],
+          people: [...people, ...addPeople],
+          savedViews: [...savedViews, ...addViews],
+          activity: [...(data.activity||[]), {id:uid(),type:"merged",time:nowIso(),detail:`Merged pack: ${summary}`}].slice(-500)
+        };
+        save(merged, {immediate:true});
+        toast(`Merged ${summary}`, {type:"success", duration:5000});
+        onClose();
+      } catch (err) { toast("Merge failed: "+err.message, {type:"error"}); }
     };
     r.readAsText(f);
     e.target.value = "";
@@ -2044,8 +2098,12 @@ function SettingsModal({open, onClose, onSignOut, onReconfigureFirebase, onManag
     <div style={{display:"grid",gap:8,marginBottom:16}}>
       <button onClick={exportBackup} style={btn("var(--acc)","124,109,240")}>⬇ Export Full Backup (JSON)</button>
       <button onClick={exportCsv} style={btn("var(--tel)","56,190,201")}>⬇ Export Tasks (CSV)</button>
+      <label style={{...btn("var(--grn)","62,207,142"),display:"inline-block",textAlign:"center",cursor:"pointer"}}>
+        ➕ Merge Tasks Pack (JSON) — adds without replacing
+        <input ref={mergeRef} type="file" accept=".json" onChange={doMerge} style={{display:"none"}} />
+      </label>
       <label style={{...btn("var(--mut)","139,143,163"),display:"inline-block",textAlign:"center",cursor:"pointer"}}>
-        ⬆ Import Backup (JSON)
+        ⬆ Import Backup (JSON) — replaces everything
         <input ref={importRef} type="file" accept=".json" onChange={doImport} style={{display:"none"}} />
       </label>
     </div>

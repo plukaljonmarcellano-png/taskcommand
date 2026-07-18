@@ -95,7 +95,7 @@ const {useState,useEffect,useCallback,useRef,useMemo,createContext,useContext,Fr
 /* ═══════════════════════════════════════════════════════════════════
    CONSTANTS
    ═══════════════════════════════════════════════════════════════════ */
-const APP_VERSION = "2.0.0";
+const APP_VERSION = "2.0.2";
 const SECTIONS = ["active","waiting","someday","done"];
 const SECTION_META = {
   active:  {label:"Active",     color:"#7c6df0", raw:"124,109,240", icon:"▶"},
@@ -667,26 +667,38 @@ function App() {
     try {
       const old = await db.ref("taskcommand").once("value");
       const oldVal = old.val();
-      if (oldVal && oldVal.tasks && oldVal.tasks.length) {
-        const doMigrate = await confirm({
-          title: "Import v1 data?",
-          message: `We found existing TaskCommand v1 data (${oldVal.tasks.length} tasks, ${(oldVal.projects||[]).length} projects). Import it now? The old data will remain in place — you can delete it later from Settings.`,
-        });
-        if (doMigrate) {
-          const migrated = hydrate({...oldVal, activity:[{id:uid(),type:"migrated",time:nowIso(),detail:`Imported ${(oldVal.tasks||[]).length} tasks from v1`}]});
-          // Strip base64 file data from migrated tasks (files metadata kept)
-          migrated.tasks = migrated.tasks.map(t => ({
+      // Firebase may return array as object with numeric keys — normalize
+      const asArray = x => Array.isArray(x) ? x : (x && typeof x === "object" ? Object.values(x) : []);
+      const oldTasks = asArray(oldVal?.tasks);
+      if (oldTasks.length > 0) {
+        // Auto-migrate — no confirmation dialog (confirm modal cannot render during loading state)
+        const oldProjects = asArray(oldVal.projects);
+        const oldPeople = asArray(oldVal.people);
+        const oldDomains = asArray(oldVal.domains);
+        const migrated = {
+          tasks: oldTasks.map(t => ({
             ...t,
             updatedAt: t.updatedAt || nowIso(),
             createdAt: t.createdAt || (t.created ? new Date(t.created).toISOString() : nowIso()),
-            files: (t.files||[]).map(f => ({name:f.name,type:f.type,size:f.size,added:f.added,removed:true}))
-          }));
-          await db.ref(`users/${u.uid}`).set(migrated);
-          toast("v1 data imported ("+migrated.tasks.length+" tasks). File attachments were removed for security — re-attach via external URL if needed.", {type:"success", duration:8000});
-          return;
-        }
+            subtasks: asArray(t.subtasks),
+            comments: asArray(t.comments),
+            files: asArray(t.files).map(f => ({name:f.name,type:f.type,size:f.size,added:f.added,removed:true}))
+          })),
+          projects: oldProjects.length ? oldProjects : DEF_PROJECTS.map(p => ({...p, id:uid()})),
+          people: oldPeople.length ? oldPeople : [u.displayName || "Me"],
+          domains: oldDomains.length ? oldDomains : DEF_DOMAINS,
+          savedViews: SAVED_VIEW_DEFAULTS,
+          activity: [{id:uid(),type:"migrated",time:nowIso(),detail:`Auto-imported ${oldTasks.length} tasks from v1`}],
+          settings: {}
+        };
+        await db.ref(`users/${u.uid}`).set(migrated);
+        toast(`v1 data imported (${oldTasks.length} tasks, ${migrated.projects.length} projects). File attachments were removed for security — re-attach as URL links if needed.`, {type:"success", duration:9000});
+        return;
       }
-    } catch (e) { /* No v1 data or no permission — proceed to seed */ }
+    } catch (e) {
+      console.error("[TC] Migration read failed:", e);
+      toast("Could not read v1 data — proceeding with a fresh workspace. Check your Realtime Database rules if you expected an import.", {type:"warn", duration:9000});
+    }
 
     const seed = {
       tasks: [],
@@ -809,24 +821,30 @@ function App() {
     return sorted;
   }, [sortBy]);
 
-  // ─── Loading & auth gates ───
+  // ─── Loading & auth gates (each includes toast/confirm portals so migration/errors can still surface) ───
   if (fbCfg === undefined || user === undefined) {
-    return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)"}}>
-      <div style={{textAlign:"center"}}><div style={{fontSize:32,marginBottom:8}} className="spin">◐</div><div>Loading…</div></div>
-    </div>;
+    return <>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)"}}>
+        <div style={{textAlign:"center"}}><div style={{fontSize:32,marginBottom:8}} className="spin">◐</div><div>Loading…</div></div>
+      </div>
+      <ToastStack toasts={toasts} dismiss={dismissToast} />{confirmEl}
+    </>;
   }
   if (showSetup || (fbCfg === null && !user)) {
-    return <SetupScreen initial={fbCfg} onComplete={c => { setFbCfg(c); setShowSetup(false); }} onCancel={fbCfg ? () => setShowSetup(false) : null} />;
+    return <><SetupScreen initial={fbCfg} onComplete={c => { setFbCfg(c); setShowSetup(false); }} onCancel={fbCfg ? () => setShowSetup(false) : null} /><ToastStack toasts={toasts} dismiss={dismissToast} />{confirmEl}</>;
   }
   if (!user) {
-    return <AuthScreen fbConfigured={!!fbCfg} onSetupClick={() => setShowSetup(true)} onSignIn={signIn} err={authErr} />;
+    return <><AuthScreen fbConfigured={!!fbCfg} onSetupClick={() => setShowSetup(true)} onSignIn={signIn} err={authErr} /><ToastStack toasts={toasts} dismiss={dismissToast} />{confirmEl}</>;
   }
   if (!data) {
-    return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)",flexDirection:"column",gap:12}}>
-      <div style={{fontSize:32}} className="spin">◐</div>
-      <div>Loading your workspace…</div>
-      <SyncBadge status={sync} />
-    </div>;
+    return <>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)",flexDirection:"column",gap:12}}>
+        <div style={{fontSize:32}} className="spin">◐</div>
+        <div>Loading your workspace…</div>
+        <SyncBadge status={sync} />
+      </div>
+      <ToastStack toasts={toasts} dismiss={dismissToast} />{confirmEl}
+    </>;
   }
 
   /* ──────────────────────────────────────────────────

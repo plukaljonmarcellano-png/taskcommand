@@ -2,561 +2,2126 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0f1117">
-<title>TaskCommand — Productivity Dashboard</title>
+<meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f7f8fc" media="(prefers-color-scheme: light)">
+<meta name="description" content="TaskCommand — professional-grade task, project, and workflow management for finance and audit teams.">
+<title>TaskCommand — Productivity Command Center</title>
 <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGFza0NvbW1hbmQiLCJzaG9ydF9uYW1lIjoiVGFza0NtZCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGYxMTE3IiwidGhlbWVfY29sb3IiOiIjMGYxMTE3In0=">
+<link rel="preconnect" href="https://www.gstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f1117;--sf:#1a1d27;--sf2:#232733;--bdr:#2e3344;--txt:#e4e6ef;--mut:#8b8fa3;--acc:#7c6df0;--grn:#3ecf8e;--amb:#f0b429;--red:#ef6461;--gold:#d4a843}
+:root{
+  --bg:#0f1117;--sf:#1a1d27;--sf2:#232733;--sf3:#2e3344;--bdr:#2e3344;--bdr2:#3a4056;
+  --txt:#e4e6ef;--txt2:#c4c8d8;--mut:#8b8fa3;--mut2:#6a6f82;
+  --acc:#7c6df0;--acc2:#9481f4;--grn:#3ecf8e;--amb:#f0b429;--red:#ef6461;--gold:#d4a843;--blu:#5ba4f5;--tel:#38bec9;--pnk:#e46eb0;--org:#f07c5a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.35);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.45);
+  --radius:8px;--radius-sm:6px;--radius-lg:12px;
+}
+[data-theme="light"]{
+  --bg:#f7f8fc;--sf:#ffffff;--sf2:#f0f2f8;--sf3:#e6e9f2;--bdr:#e0e3ee;--bdr2:#c9cee0;
+  --txt:#1a1d27;--txt2:#3a4056;--mut:#6a6f82;--mut2:#8b8fa3;
+  --shadow-sm:0 1px 2px rgba(15,17,23,0.06);
+  --shadow-md:0 4px 12px rgba(15,17,23,0.08);
+  --shadow-lg:0 12px 32px rgba(15,17,23,0.14);
+}
 html,body{height:100%}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;overflow-x:hidden}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:var(--sf)}
-::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
-input,select,textarea,button{font-family:inherit}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--bdr2)}
+input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:-1px}
+button{cursor:pointer;background:none;border:none}
 a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+kbd{font-family:'JetBrains Mono',ui-monospace,monospace;background:var(--sf2);border:1px solid var(--bdr);border-bottom-width:2px;border-radius:4px;padding:1px 6px;font-size:11px;color:var(--txt2)}
+.tabnum{font-variant-numeric:tabular-nums}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.spin{animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn 0.15s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.slide-in{animation:slideIn 0.2s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.toast-in{animation:toastIn 0.25s cubic-bezier(0.22,1,0.36,1)}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.9)}to{opacity:1;transform:none}}
+.card{transition:border-color 0.15s,background 0.15s,transform 0.1s}
+.card:hover{background:var(--sf3)}
+.card:active{transform:scale(0.995)}
+.btn-hover:hover{filter:brightness(1.15)}
+.chip-hover{cursor:pointer;transition:opacity 0.15s}
+.chip-hover:hover{opacity:0.75}
+.row-hover:hover{background:var(--sf2)}
+.link-hover:hover{color:var(--acc2)}
+details>summary{cursor:pointer;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .no-print{display:none!important}
+  .print-only{display:block!important}
+  *{box-shadow:none!important;text-shadow:none!important}
+}
+.print-only{display:none}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<script>
+// Force classic JSX runtime so babel-standalone doesn't emit `import` statements
+if (window.Babel && Babel.registerPreset) {
+  Babel.registerPreset('tc-jsx', {
+    presets: [[Babel.availablePresets['react'], {runtime:'classic'}]]
+  });
+}
+</script>
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const {useState,useEffect,useCallback,useRef} = React;
+<script type="text/babel" data-presets="tc-jsx">
+const {useState,useEffect,useCallback,useRef,useMemo,createContext,useContext,Fragment} = React;
 
-/* ═══ CONSTANTS ═══ */
-const SECTIONS=["active","waiting","someday","done"];
-const SECTION_META={active:{label:"Active",color:"#7c6df0",bg:"rgba(124,109,240,0.12)",icon:"▶"},waiting:{label:"Waiting On",color:"#f0b429",bg:"rgba(240,180,41,0.12)",icon:"⏳"},someday:{label:"Someday",color:"#d4a843",bg:"rgba(212,168,67,0.12)",icon:"☆"},done:{label:"Done",color:"#3ecf8e",bg:"rgba(62,207,142,0.12)",icon:"✓"}};
-const STATUSES=["Not Started","In Progress","In Review","Blocked","Done"];
-const STATUS_C={"Not Started":{color:"#8b8fa3",bg:"rgba(139,143,163,0.12)"},"In Progress":{color:"#7c6df0",bg:"rgba(124,109,240,0.12)"},"In Review":{color:"#f0b429",bg:"rgba(240,180,41,0.12)"},"Blocked":{color:"#ef6461",bg:"rgba(239,100,97,0.12)"},"Done":{color:"#3ecf8e",bg:"rgba(62,207,142,0.12)"}};
-const PRIORITIES=["Critical","High","Medium","Low"];
-const PRI_M={Critical:{color:"#ef6461",bg:"rgba(239,100,97,0.15)",icon:"🔴"},High:{color:"#f07c5a",bg:"rgba(240,124,90,0.12)",icon:"🟠"},Medium:{color:"#f0b429",bg:"rgba(240,180,41,0.12)",icon:"🟡"},Low:{color:"#8b8fa3",bg:"rgba(139,143,163,0.12)",icon:"⚪"}};
-const COLOR_PRESETS=[{n:"Purple",h:"#7c6df0"},{n:"Blue",h:"#5ba4f5"},{n:"Teal",h:"#38bec9"},{n:"Green",h:"#3ecf8e"},{n:"Gold",h:"#d4a843"},{n:"Amber",h:"#f0b429"},{n:"Orange",h:"#f07c5a"},{n:"Red",h:"#ef6461"},{n:"Pink",h:"#e46eb0"},{n:"Gray",h:"#8b8fa3"}];
-const hexBg=h=>{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},0.12)`};
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const td=()=>new Date().toISOString().split("T")[0];
-const now=()=>new Date().toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
-const fSize=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB";
+/* ═══════════════════════════════════════════════════════════════════
+   CONSTANTS
+   ═══════════════════════════════════════════════════════════════════ */
+const APP_VERSION = "2.0.0";
+const SECTIONS = ["active","waiting","someday","done"];
+const SECTION_META = {
+  active:  {label:"Active",     color:"#7c6df0", raw:"124,109,240", icon:"▶"},
+  waiting: {label:"Waiting On", color:"#f0b429", raw:"240,180,41",  icon:"⏳"},
+  someday: {label:"Someday",    color:"#d4a843", raw:"212,168,67",  icon:"☆"},
+  done:    {label:"Done",       color:"#3ecf8e", raw:"62,207,142",  icon:"✓"}
+};
+const STATUSES = ["Not Started","In Progress","In Review","Blocked","Done"];
+const STATUS_C = {
+  "Not Started":{color:"var(--mut)",  bgRaw:"139,143,163"},
+  "In Progress":{color:"var(--acc)",  bgRaw:"124,109,240"},
+  "In Review":  {color:"var(--amb)",  bgRaw:"240,180,41"},
+  "Blocked":    {color:"var(--red)",  bgRaw:"239,100,97"},
+  "Done":       {color:"var(--grn)",  bgRaw:"62,207,142"}
+};
+const PRIORITIES = ["Critical","High","Medium","Low"];
+const PRI_M = {
+  Critical:{color:"var(--red)",   bgRaw:"239,100,97", icon:"🔴", weight:4},
+  High:    {color:"var(--org)",   bgRaw:"240,124,90", icon:"🟠", weight:3},
+  Medium:  {color:"var(--amb)",   bgRaw:"240,180,41", icon:"🟡", weight:2},
+  Low:     {color:"var(--mut)",   bgRaw:"139,143,163",icon:"⚪", weight:1}
+};
+const RECURRENCE_PRESETS = [
+  {v:"none",     l:"Not recurring"},
+  {v:"daily",    l:"Daily"},
+  {v:"weekly",   l:"Weekly"},
+  {v:"biweekly", l:"Every 2 weeks"},
+  {v:"monthly",  l:"Monthly (same day)"},
+  {v:"month-end",l:"Monthly (last business day)"},
+  {v:"quarterly",l:"Quarterly"},
+  {v:"yearly",   l:"Yearly"}
+];
+const COLOR_PRESETS = [
+  {n:"Purple",h:"#7c6df0"},{n:"Blue",h:"#5ba4f5"},{n:"Teal",h:"#38bec9"},
+  {n:"Green",h:"#3ecf8e"},{n:"Gold",h:"#d4a843"},{n:"Amber",h:"#f0b429"},
+  {n:"Orange",h:"#f07c5a"},{n:"Red",h:"#ef6461"},{n:"Pink",h:"#e46eb0"},{n:"Gray",h:"#8b8fa3"}
+];
+const DEF_DOMAINS = [
+  {name:"Finance",   color:"#7c6df0"},
+  {name:"Audit",     color:"#ef6461"},
+  {name:"FP&A",      color:"#5ba4f5"},
+  {name:"Close",     color:"#3ecf8e"},
+  {name:"Controls",  color:"#38bec9"},
+  {name:"Reporting", color:"#d4a843"},
+  {name:"Tax",       color:"#f07c5a"},
+  {name:"Personal",  color:"#8b8fa3"}
+];
+const DEF_PROJECTS = [
+  {name:"Month-End Close",         domain:"Close",     status:"Recurring"},
+  {name:"GL Reconciliations",      domain:"Finance",   status:"Active"},
+  {name:"External Audit Support",  domain:"Audit",     status:"Active"},
+  {name:"Q3 Forecast",             domain:"FP&A",      status:"Active"},
+  {name:"CMA Part 1 Prep",         domain:"Personal",  status:"Target: Oct 2026"}
+];
+const SAVED_VIEW_DEFAULTS = [
+  {id:"v-today",   name:"Today",       filter:{dueGroup:"today"}},
+  {id:"v-overdue", name:"Overdue",     filter:{dueGroup:"overdue"}},
+  {id:"v-week",    name:"This Week",   filter:{dueGroup:"week"}},
+  {id:"v-active",  name:"Active",      filter:{section:"active"}}
+];
 
-const DEF_DOMAINS=[{name:"Finance",color:"#7c6df0"},{name:"Audit",color:"#ef6461"},{name:"FP&A",color:"#5ba4f5"},{name:"Community",color:"#d4a843"},{name:"Ministry",color:"#3ecf8e"},{name:"Study",color:"#f0b429"},{name:"Personal",color:"#8b8fa3"},{name:"IT",color:"#38bec9"}];
-const DEF_STATE={tasks:[],projects:[{id:uid(),name:"GL Reconciliation Workflow",domain:"Finance",status:"Active"},{id:uid(),name:"GOSI Payable Schedule",domain:"Finance",status:"Active"},{id:uid(),name:"Mr. Elite Society 2026",domain:"Community",status:"Active"},{id:uid(),name:"Grace Center Treasury App",domain:"Ministry",status:"Active"},{id:uid(),name:"CMA Part 1 Study",domain:"Study",status:"Target: Oct 2026"}],people:["Jun Jun","Unassigned"],domains:DEF_DOMAINS};
+/* ═══════════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════════ */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const td = () => new Date().toISOString().split("T")[0];
+const nowIso = () => new Date().toISOString();
+const nowH = () => new Date().toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const fSize = b => b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(2)+" MB";
+const fDate = d => d ? new Date(d).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}) : "—";
+const fDateShort = d => d ? new Date(d).toLocaleDateString("en-GB",{day:"2-digit",month:"short"}) : "—";
+const fDateTime = t => t ? new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+const daysBetween = (a,b) => Math.round((new Date(b) - new Date(a))/(1000*60*60*24));
+const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x.toISOString().split("T")[0]; };
+const addMonths = (d,n) => { const x=new Date(d); x.setMonth(x.getMonth()+n); return x.toISOString().split("T")[0]; };
+const lastBusinessDay = (year,month) => {
+  const d = new Date(year, month+1, 0); // last day of month
+  while (d.getDay()===0 || d.getDay()===6) d.setDate(d.getDate()-1);
+  return d.toISOString().split("T")[0];
+};
+const hexToRaw = h => {
+  const r=parseInt(h.slice(1,3),16), g=parseInt(h.slice(3,5),16), b=parseInt(h.slice(5,7),16);
+  return `${r},${g},${b}`;
+};
+const hexBg = (h,alpha=0.12) => `rgba(${hexToRaw(h)},${alpha})`;
+const rgbaBg = (raw,alpha=0.12) => `rgba(${raw},${alpha})`;
+const isOverdue = (t) => t.due && t.section !== "done" && t.due < td();
+const priorityScore = (t) => {
+  const p = PRI_M[t.priority||"Medium"]?.weight || 2;
+  const daysUntil = t.due ? daysBetween(td(), t.due) : 999;
+  const overdueBoost = daysUntil < 0 ? 10 : 0;
+  return p*10 - Math.min(daysUntil,30) + overdueBoost;
+};
+const dueBucket = (t) => {
+  if (!t.due) return "none";
+  const diff = daysBetween(td(), t.due);
+  if (t.section === "done") return "done";
+  if (diff < 0) return "overdue";
+  if (diff === 0) return "today";
+  if (diff <= 7) return "week";
+  if (diff <= 30) return "month";
+  return "later";
+};
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
+const csvEscape = v => {
+  if (v==null) return "";
+  const s = String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+};
+const downloadBlob = (data, filename, type="application/json") => {
+  const blob = new Blob([data], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 100);
+};
 
-const C={bg:"#0f1117",sf:"#1a1d27",sf2:"#232733",bdr:"#2e3344",txt:"#e4e6ef",mut:"#8b8fa3",acc:"#7c6df0",grn:"#3ecf8e",amb:"#f0b429",red:"#ef6461",gold:"#d4a843"};
+/* ═══════════════════════════════════════════════════════════════════
+   STYLE HELPERS (using CSS variables so light/dark just works)
+   ═══════════════════════════════════════════════════════════════════ */
+const pill = (color, bgRaw, alpha=0.14) => ({
+  display:"inline-flex", alignItems:"center", gap:4, fontSize:10.5,
+  padding:"2px 8px", borderRadius:4, fontWeight:600,
+  color, background:`rgba(${bgRaw},${alpha})`, whiteSpace:"nowrap"
+});
+const btn = (color="var(--acc)", bgRaw="124,109,240", alpha=0.14) => ({
+  background:`rgba(${bgRaw},${alpha})`, color, border:`1px solid rgba(${bgRaw},0.3)`,
+  padding:"8px 14px", borderRadius:6, fontSize:13, fontWeight:600,
+  whiteSpace:"nowrap", transition:"filter 0.15s"
+});
+const btnSm = (color="var(--acc)") => ({
+  background:"none", color, padding:"4px 6px", fontSize:12, borderRadius:4
+});
+const iSt = {
+  background:"var(--sf2)", border:"1px solid var(--bdr)", borderRadius:6,
+  padding:"9px 12px", color:"var(--txt)", fontSize:13, width:"100%"
+};
+const sel = {...iSt, cursor:"pointer"};
+const cSt = {
+  background:"var(--sf)", border:"1px solid var(--bdr)", borderRadius:8, padding:16
+};
+const lSt = {
+  display:"block", fontSize:11, fontWeight:600, color:"var(--mut)",
+  marginBottom:5, textTransform:"uppercase", letterSpacing:0.5
+};
 
-/* ═══ STYLE HELPERS ═══ */
-const pill=(c,bg)=>({display:"inline-flex",alignItems:"center",gap:3,fontSize:10,padding:"2px 8px",borderRadius:4,fontWeight:600,color:c,background:bg});
-const btn=(c=C.acc,bg="rgba(124,109,240,0.12)")=>({background:bg,color:c,border:`1px solid ${c}30`,padding:"8px 16px",borderRadius:6,fontSize:13,fontWeight:500,cursor:"pointer",whiteSpace:"nowrap"});
-const btnSm=(c=C.acc)=>({background:"none",color:c,border:"none",padding:"4px 6px",fontSize:12,cursor:"pointer",borderRadius:4});
-const iSt={background:C.sf2,border:`1px solid ${C.bdr}`,borderRadius:6,padding:"9px 12px",color:C.txt,fontSize:13,outline:"none",width:"100%"};
-const sel={...iSt,cursor:"pointer"};
-const cSt={background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:8,padding:16};
-const lSt={display:"block",fontSize:11,fontWeight:600,color:C.mut,marginBottom:4,textTransform:"uppercase",letterSpacing:0.5};
+/* ═══════════════════════════════════════════════════════════════════
+   THEME + TOAST + AUTH context
+   ═══════════════════════════════════════════════════════════════════ */
+const AppContext = createContext(null);
+const useApp = () => useContext(AppContext);
 
-/* ═══ SMALL COMPONENTS ═══ */
-function SyncBadge({status}){const m={synced:{c:C.grn,l:"Synced",i:"☁"},syncing:{c:C.amb,l:"Syncing...",i:"↻"},offline:{c:C.mut,l:"Local Only",i:"💾"},error:{c:C.red,l:"Sync Error",i:"⚠"}};const s=m[status]||m.offline;return<span style={{fontSize:11,color:s.c,display:"inline-flex",alignItems:"center",gap:4}}>{s.i} {s.l}</span>}
-function ColorPicker({value,onChange,size=22}){return<div style={{display:"flex",gap:4,flexWrap:"wrap",alignItems:"center"}}>{COLOR_PRESETS.map(p=><div key={p.h} onClick={()=>onChange(p.h)} title={p.n} style={{width:size,height:size,borderRadius:4,background:p.h,cursor:"pointer",border:value===p.h?"2px solid #fff":"2px solid transparent"}} />)}<input type="color" value={value} onChange={e=>onChange(e.target.value)} style={{width:size+4,height:size+4,border:"none",background:"none",cursor:"pointer",padding:0}} /></div>}
-function PBar({done,total}){if(!total)return null;const pct=Math.round((done/total)*100);return<div style={{marginTop:6}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:C.mut,marginBottom:3}}><span>{done}/{total} subtasks</span><span>{pct}%</span></div><div style={{height:4,background:C.sf2,borderRadius:2,overflow:"hidden"}}><div style={{height:"100%",width:pct+"%",background:pct===100?C.grn:C.acc,borderRadius:2,transition:"width 0.3s"}} /></div></div>}
-
-/* ═══ FIREBASE SETUP SCREEN ═══ */
-function SetupScreen({onComplete}){
-  const [cfg,setCfg]=useState({apiKey:"",authDomain:"",databaseURL:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""});
-  const [paste,setPaste]=useState("");const [err,setErr]=useState("");const [testing,setTesting]=useState(false);const [dbUrlManual,setDbUrlManual]=useState("");
-
-  /* ── Fixed parser: handles JSON, JS literals, full SDK snippets, URLs with colons ── */
-  const parse=text=>{
-    if(!text||!text.trim()){setErr("");return;}
-    try{
-      const trimmed=text.trim();
-      // Strategy 1: Direct JSON
-      if(trimmed.startsWith("{")){try{const o=JSON.parse(trimmed);if(o.apiKey){applyConfig(o,text);return;}}catch(e){}}
-      // Strategy 2: Brace-counted extraction
-      const start=text.indexOf("{");
-      if(start===-1){setErr("No config object found — paste must contain { }.");return;}
-      let depth=0,end=-1;
-      for(let i=start;i<text.length;i++){if(text[i]==="{")depth++;else if(text[i]==="}"){depth--;if(depth===0){end=i;break;}}}
-      if(end===-1){setErr("Unmatched braces in pasted config.");return;}
-      const block=text.slice(start,end+1);
-      // 2a: Try direct parse on extracted block
-      try{const o=JSON.parse(block);if(o.apiKey){applyConfig(o,text);return;}}catch(e){}
-      // 2b: Line-by-line key normalization (only touch keys at line start, NOT inside URL values)
-      const lines=block.split("\n");
-      const norm=lines.map(line=>line.replace(/^(\s*)(['"]?)(\w+)\2(\s*:\s*)/,(_,ind,_q,key,sep)=>`${ind}"${key}"${sep}`));
-      let js=norm.join("\n");
-      js=js.replace(/:\s*'([^']*)'/g,': "$1"');  // single-quoted values → double
-      js=js.replace(/,(\s*[}\]])/g,"$1");         // trailing commas
-      try{const o=JSON.parse(js);if(o.apiKey){applyConfig(o,text);return;}}catch(e){}
-      // Strategy 3: Regex key-value extraction (last resort)
-      const result={};const kvRe=/['"]?(\w+)['"]?\s*:\s*['"]([^'"]*)['"]/g;let m;
-      while((m=kvRe.exec(text))!==null)result[m[1]]=m[2];
-      if(result.apiKey){applyConfig(result,text);return;}
-      setErr("Could not parse config. Paste the firebaseConfig object from your Firebase console.");
-    }catch(e){setErr("Parse error: "+e.message);}
-  };
-
-  const applyConfig=(obj,raw)=>{
-    const c={apiKey:obj.apiKey||"",authDomain:obj.authDomain||"",databaseURL:obj.databaseURL||"",projectId:obj.projectId||"",storageBucket:obj.storageBucket||"",messagingSenderId:obj.messagingSenderId||"",appId:obj.appId||""};
-    setCfg(c);setPaste(raw);setErr("");
-    // Auto-construct databaseURL if missing but projectId exists
-    if(!c.databaseURL&&c.projectId){setDbUrlManual("https://"+c.projectId+"-default-rtdb.firebaseio.com");}
-  };
-
-  const finalDbUrl=cfg.databaseURL||dbUrlManual;
-
-  const go=async()=>{
-    if(!cfg.apiKey){setErr("apiKey is required.");return;}
-    if(!finalDbUrl){setErr("databaseURL is required. Enter it manually below or re-copy config after creating Realtime Database.");return;}
-    const fullCfg={...cfg,databaseURL:finalDbUrl};
-    setTesting(true);setErr("");
-    try{
-      const a=firebase.initializeApp(fullCfg,"test-"+Date.now());const db=firebase.database(a);
-      await Promise.race([db.ref(".info/connected").once("value"),new Promise((_,rej)=>setTimeout(()=>rej(new Error("Timeout — check databaseURL and DB rules")),8000))]);
-      a.delete();localStorage.setItem("tc-firebase-config",JSON.stringify(fullCfg));onComplete(fullCfg);
-    }catch(e){setErr("Connection failed: "+e.message);setTesting(false);}
-  };
-
-  return<div style={{minHeight:"100vh",background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}><div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:12,padding:32,width:"100%",maxWidth:560}}>
-    <div style={{textAlign:"center",marginBottom:24}}><div style={{fontSize:36,marginBottom:8}}>⚡</div><h1 style={{fontSize:22,fontWeight:700,marginBottom:4}}>TaskCommand</h1><p style={{color:C.mut,fontSize:14}}>Connect Firebase for real-time cloud sync.</p></div>
-    <div style={{background:C.sf2,borderRadius:8,padding:16,marginBottom:20,fontSize:13,color:C.mut,lineHeight:1.7}}><strong style={{color:C.txt}}>Quick Setup (5 min, free):</strong><br/>1. Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a><br/>2. Create project → <strong>Build → Realtime Database → Create Database</strong> (test mode)<br/>3. <strong>Project Settings</strong> (⚙) → General → Your apps → Web ({"</>"}) → Register<br/>4. Copy the entire <code>firebaseConfig</code> block and paste below</div>
-    <div style={{marginBottom:16}}><label style={lSt}>Paste Firebase Config</label><textarea style={{...iSt,minHeight:120,fontFamily:"monospace",fontSize:12,resize:"vertical"}} placeholder={'Paste any format — JSON, JS object, or full SDK snippet:\n\nconst firebaseConfig = {\n  apiKey: "AIzaSy...",\n  authDomain: "myapp.firebaseapp.com",\n  databaseURL: "https://myapp-default-rtdb.firebaseio.com",\n  projectId: "myapp"\n};'} value={paste} onChange={e=>{setPaste(e.target.value);parse(e.target.value);}} /></div>
-    {cfg.apiKey&&<div style={{background:C.sf2,borderRadius:6,padding:12,marginBottom:16,fontSize:12}}>
-      <div style={{color:C.grn,fontWeight:600,marginBottom:6}}>✓ Config parsed successfully</div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 12px",color:C.mut}}>
-        <div>apiKey: <strong style={{color:C.txt}}>{cfg.apiKey.slice(0,16)}...</strong></div>
-        <div>projectId: <strong style={{color:C.txt}}>{cfg.projectId||"—"}</strong></div>
-        <div>authDomain: <strong style={{color:C.txt}}>{cfg.authDomain||"—"}</strong></div>
-        <div>appId: <strong style={{color:C.txt}}>{cfg.appId?cfg.appId.slice(0,20)+"...":"—"}</strong></div>
-      </div>
-      <div style={{marginTop:6}}>databaseURL: <strong style={{color:finalDbUrl?C.grn:C.red}}>{finalDbUrl||"⚠ Missing — enter below"}</strong></div>
-    </div>}
-    {cfg.apiKey&&!cfg.databaseURL&&<div style={{marginBottom:16}}>
-      <div style={{background:"rgba(240,180,41,0.08)",border:"1px solid rgba(240,180,41,0.25)",borderRadius:8,padding:12,marginBottom:8,fontSize:12,color:C.amb}}>
-        <strong>databaseURL not found in your config.</strong> Firebase only includes it if Realtime Database existed when you registered the web app. You can find it in <strong>Build → Realtime Database</strong> — the URL is shown at the top of the data viewer.
-      </div>
-      <label style={lSt}>Database URL</label>
-      <input style={iSt} value={dbUrlManual} onChange={e=>setDbUrlManual(e.target.value)} placeholder="https://your-project-default-rtdb.firebaseio.com" />
-    </div>}
-    {err&&<div style={{color:C.red,fontSize:13,marginBottom:12,padding:"8px 12px",background:"rgba(239,100,97,0.1)",borderRadius:6}}>⚠ {err}</div>}
-    <button style={{...btn(),width:"100%",padding:12,fontSize:15,fontWeight:600,opacity:(!cfg.apiKey||testing)?0.5:1}} onClick={go} disabled={!cfg.apiKey||testing}>{testing?"Testing connection...":"Connect & Launch"}</button>
-    <div style={{textAlign:"center",marginTop:16}}><button style={{...btnSm(C.mut),fontSize:12}} onClick={()=>{localStorage.setItem("tc-mode","local");onComplete(null);}}>Skip — use local storage only (single device)</button></div>
-  </div></div>;
+function useTheme() {
+  const [theme, setTheme] = useState(() => localStorage.getItem("tc-theme") || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"));
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("tc-theme", theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme==="light" ? "#f7f8fc" : "#0f1117");
+  }, [theme]);
+  return [theme, setTheme];
 }
 
-/* ═══ MAIN APP ═══ */
-function App(){
-  const [fbCfg,setFbCfg]=useState(undefined);
-  const [data,setData]=useState(null);
-  const [sync,setSync]=useState("offline");
-  const [view,setView]=useState("board");
-  const [showTF,setShowTF]=useState(false);
-  const [editT,setEditT]=useState(null);
-  const [detailT,setDetailT]=useState(null);
-  const [showPF,setShowPF]=useState(false);
-  const [editP,setEditP]=useState(null);
-  const [showPM,setShowPM]=useState(false);
-  const [showDM,setShowDM]=useState(false);
-  const [showSet,setShowSet]=useState(false);
-  // Subtask modals
-  const [showSubForm,setShowSubForm]=useState(false);
-  const [editSub,setEditSub]=useState(null);
-  const [subDetailId,setSubDetailId]=useState(null);
+function useToasts() {
+  const [toasts, setToasts] = useState([]);
+  const push = useCallback((msg, opts={}) => {
+    const id = uid();
+    const toast = {id, msg, type:opts.type||"info", action:opts.action, duration:opts.duration||4000};
+    setToasts(t => [...t, toast]);
+    if (toast.duration) setTimeout(() => setToasts(t => t.filter(x=>x.id!==id)), toast.duration);
+    return id;
+  }, []);
+  const dismiss = useCallback((id) => setToasts(t => t.filter(x=>x.id!==id)), []);
+  return {toasts, push, dismiss};
+}
 
-  const [flt,setFlt]=useState({section:"all",domain:"all",assignee:"all",status:"all",priority:"all",search:""});
-  const dbRef=useRef(null);const skipSync=useRef(false);const dragRef=useRef(null);
+function ToastStack({toasts, dismiss}) {
+  const colors = {
+    info:    {c:"var(--acc)", bg:"124,109,240"},
+    success: {c:"var(--grn)", bg:"62,207,142"},
+    warn:    {c:"var(--amb)", bg:"240,180,41"},
+    error:   {c:"var(--red)", bg:"239,100,97"}
+  };
+  return <div className="no-print" style={{position:"fixed",bottom:16,right:16,zIndex:9000,display:"flex",flexDirection:"column",gap:8,pointerEvents:"none",maxWidth:360}}>
+    {toasts.map(t => {
+      const c = colors[t.type] || colors.info;
+      return <div key={t.id} className="toast-in" style={{background:"var(--sf)",border:`1px solid ${c.c}`,borderLeft:`4px solid ${c.c}`,borderRadius:8,padding:"10px 14px",boxShadow:"var(--shadow-lg)",fontSize:13,color:"var(--txt)",pointerEvents:"auto",display:"flex",alignItems:"center",gap:10,minWidth:240}}>
+        <div style={{flex:1}}>{t.msg}</div>
+        {t.action && <button onClick={() => { t.action.onClick(); dismiss(t.id); }} style={{color:c.c,fontWeight:700,fontSize:12,padding:"4px 10px",background:`rgba(${c.bg},0.14)`,borderRadius:4}}>{t.action.label}</button>}
+        <button onClick={() => dismiss(t.id)} style={{color:"var(--mut)",fontSize:16,padding:2}}>×</button>
+      </div>;
+    })}
+  </div>;
+}
 
-  // Init
-  useEffect(()=>{const s=localStorage.getItem("tc-firebase-config");const m=localStorage.getItem("tc-mode");if(s)try{setFbCfg(JSON.parse(s));}catch{setFbCfg(null);}else if(m==="local")setFbCfg(null);else setFbCfg(undefined);},[]);
+/* ═══════════════════════════════════════════════════════════════════
+   SMALL PRESENTATIONAL COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+function SyncBadge({status}) {
+  const m = {
+    synced:  {c:"var(--grn)", l:"Synced",     i:"●"},
+    syncing: {c:"var(--amb)", l:"Syncing…",   i:"◐"},
+    offline: {c:"var(--mut)", l:"Offline",    i:"○"},
+    error:   {c:"var(--red)", l:"Sync Error", i:"✕"}
+  };
+  const s = m[status] || m.offline;
+  return <span title={s.l} style={{fontSize:11.5,color:s.c,display:"inline-flex",alignItems:"center",gap:5,fontWeight:600}}>
+    <span className={status==="syncing"?"spin":""} style={{fontSize:8,display:"inline-block"}}>{s.i}</span> {s.l}
+  </span>;
+}
 
-  // Firebase connect
-  useEffect(()=>{if(!fbCfg)return;try{const ex=firebase.apps.find(a=>a.name==="tc");const app=ex||firebase.initializeApp(fbCfg,"tc");const db=firebase.database(app);dbRef.current=db.ref("taskcommand");
-    dbRef.current.on("value",snap=>{if(skipSync.current){skipSync.current=false;return;}const v=snap.val();if(v){setData(v);localStorage.setItem("tc-data",JSON.stringify(v));setSync("synced");}else{dbRef.current.set(DEF_STATE);setData(DEF_STATE);localStorage.setItem("tc-data",JSON.stringify(DEF_STATE));setSync("synced");}},e=>{setSync("error");const l=localStorage.getItem("tc-data");setData(l?JSON.parse(l):DEF_STATE);});
-    db.ref(".info/connected").on("value",s=>{if(s.val()===true)setSync("synced");});
-    return()=>{dbRef.current.off();db.ref(".info/connected").off();};}catch(e){setSync("error");const l=localStorage.getItem("tc-data");setData(l?JSON.parse(l):DEF_STATE);}
-  },[fbCfg]);
+function ColorPicker({value,onChange,size=22}) {
+  return <div style={{display:"flex",gap:5,flexWrap:"wrap",alignItems:"center"}}>
+    {COLOR_PRESETS.map(p => <div key={p.h} onClick={()=>onChange(p.h)} title={p.n}
+      style={{width:size,height:size,borderRadius:5,background:p.h,cursor:"pointer",
+        border:value===p.h?"2px solid var(--txt)":"2px solid transparent",transition:"transform 0.1s"}} />)}
+    <input type="color" value={value} onChange={e=>onChange(e.target.value)}
+      style={{width:size+4,height:size+4,border:"none",background:"none",cursor:"pointer",padding:0}} />
+  </div>;
+}
 
-  // Local mode
-  useEffect(()=>{if(fbCfg!==null)return;const l=localStorage.getItem("tc-data");setData(l?JSON.parse(l):DEF_STATE);setSync("offline");},[fbCfg]);
+function PBar({done,total,color,size=4}) {
+  if (!total) return null;
+  const pct = Math.round((done/total)*100);
+  const barColor = color || (pct===100 ? "var(--grn)" : "var(--acc)");
+  return <div style={{marginTop:6}}>
+    <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--mut)",marginBottom:3}}>
+      <span>{done}/{total}</span><span>{pct}%</span>
+    </div>
+    <div style={{height:size,background:"var(--sf2)",borderRadius:size/2,overflow:"hidden"}}>
+      <div style={{height:"100%",width:pct+"%",background:barColor,borderRadius:size/2,transition:"width 0.3s"}} />
+    </div>
+  </div>;
+}
 
-  // Save
-  const save=useCallback(nd=>{const cl=JSON.parse(JSON.stringify(nd));cl.tasks=(cl.tasks||[]).map(t=>({...t,files:(t.files||[]).map(f=>({name:f.name,type:f.type,size:f.size,added:f.added})),subtasks:t.subtasks||[],comments:t.comments||[]}));setData(cl);localStorage.setItem("tc-data",JSON.stringify(cl));if(dbRef.current){setSync("syncing");skipSync.current=true;dbRef.current.set(cl).then(()=>setSync("synced")).catch(()=>setSync("error"));}},[]);
+function KpiTile({label,value,accent,sub,onClick,selected}) {
+  return <div onClick={onClick} style={{...cSt, cursor:onClick?"pointer":"default", padding:"14px 16px",
+    borderColor:selected?accent:"var(--bdr)", boxShadow:selected?"var(--shadow-md)":"none"}}>
+    <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:0.6,color:"var(--mut)",fontWeight:700}}>{label}</div>
+    <div className="tabnum" style={{fontSize:28,fontWeight:800,color:accent||"var(--txt)",lineHeight:1.1,marginTop:4}}>{value}</div>
+    {sub && <div style={{fontSize:11,color:"var(--mut)",marginTop:2}}>{sub}</div>}
+  </div>;
+}
 
-  if(fbCfg===undefined)return<SetupScreen onComplete={c=>setFbCfg(c)} />;
-  if(!data)return<div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:C.bg,color:C.mut}}>⏳ Loading...</div>;
+function Sparkline({data, color="var(--acc)", height=32}) {
+  if (!data || !data.length) return null;
+  const max = Math.max(...data, 1);
+  const w = 100;
+  const denom = Math.max(data.length - 1, 1);
+  const points = data.map((v,i) => `${(i/denom)*w},${height - (v/max)*height}`).join(" ");
+  return <svg width="100%" height={height} viewBox={`0 0 ${w} ${height}`} preserveAspectRatio="none" style={{display:"block"}}>
+    <polyline fill="none" stroke={color} strokeWidth="1.5" points={points} vectorEffect="non-scaling-stroke" />
+  </svg>;
+}
 
-  const {tasks=[],projects=[],people=[],domains=DEF_DOMAINS}=data;
-  const dNames=domains.map(d=>d.name);
-  const gDC=name=>{const d=domains.find(x=>x.name===name);return d?{c:d.color,bg:hexBg(d.color)}:{c:C.mut,bg:"rgba(139,143,163,0.12)"};};
-  const counts=Object.fromEntries(SECTIONS.map(s=>[s,tasks.filter(t=>t.section===s).length]));
-  const overdue=tasks.filter(t=>t.due&&t.section!=="done"&&t.due<td()).length;
+function Modal({open, onClose, title, children, width=520, footer}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = e => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [open, onClose]);
+  if (!open) return null;
+  return <div className="fade-in no-print" style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",backdropFilter:"blur(2px)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={onClose}>
+    <div style={{background:"var(--sf)",border:"1px solid var(--bdr)",borderRadius:12,width:"100%",maxWidth:width,maxHeight:"92vh",display:"flex",flexDirection:"column",boxShadow:"var(--shadow-lg)"}} onClick={e=>e.stopPropagation()}>
+      {title && <div style={{padding:"18px 22px",borderBottom:"1px solid var(--bdr)",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
+        <h3 style={{fontSize:15,fontWeight:700}}>{title}</h3>
+        <button onClick={onClose} style={{color:"var(--mut)",fontSize:20,lineHeight:1,padding:4}}>×</button>
+      </div>}
+      <div style={{padding:22,overflow:"auto",flex:1}}>{children}</div>
+      {footer && <div style={{padding:"14px 22px",borderTop:"1px solid var(--bdr)",display:"flex",gap:8,justifyContent:"flex-end",flexShrink:0}}>{footer}</div>}
+    </div>
+  </div>;
+}
 
-  const aFlt=list=>list.filter(t=>{const f=flt;if(f.section!=="all"&&t.section!==f.section)return false;if(f.domain!=="all"&&t.domain!==f.domain)return false;if(f.assignee!=="all"&&t.assignee!==f.assignee)return false;if(f.status!=="all"&&t.taskStatus!==f.status)return false;if(f.priority!=="all"&&t.priority!==f.priority)return false;if(f.search){const q=f.search.toLowerCase();if(![t.title,t.notes,t.assignee,...(t.subtasks||[]).map(s=>s.title)].join(" ").toLowerCase().includes(q))return false;}return true;});
-  const filtered=aFlt(tasks);
+function ConfirmModal({open, title, message, onConfirm, onCancel, danger}) {
+  return <Modal open={open} onClose={onCancel} title={title} width={420}
+    footer={<>
+      <button onClick={onCancel} style={btn("var(--mut)","139,143,163")}>Cancel</button>
+      <button onClick={onConfirm} style={btn(danger?"var(--red)":"var(--acc)", danger?"239,100,97":"124,109,240", 0.18)}>Confirm</button>
+    </>}>
+    <div style={{fontSize:14,color:"var(--txt2)",lineHeight:1.6}}>{message}</div>
+  </Modal>;
+}
 
-  /* ─── Task CRUD ─── */
-  const uTask=(id,u)=>{const nt=tasks.map(t=>t.id===id?{...t,...u}:t);save({...data,tasks:nt});if(detailT?.id===id)setDetailT({...detailT,...u});};
-  const aTask=t=>{save({...data,tasks:[...tasks,{...t,id:uid(),created:td(),subtasks:[],comments:[],files:[],taskStatus:t.taskStatus||"Not Started"}]});setShowTF(false);setEditT(null);};
-  const sEditTask=t=>{save({...data,tasks:tasks.map(x=>x.id===t.id?{...x,...t}:x)});setShowTF(false);setEditT(null);if(detailT?.id===t.id)setDetailT({...detailT,...t});};
-  const dTask=id=>{save({...data,tasks:tasks.filter(t=>t.id!==id)});if(detailT?.id===id)setDetailT(null);};
-  const mvTask=(id,to)=>{const u={section:to};if(to==="done"){u.completed=td();u.taskStatus="Done";}uTask(id,u);};
+function useConfirm() {
+  const [c, setC] = useState(null);
+  const ask = (opts) => new Promise(res => setC({...opts, res}));
+  const el = <ConfirmModal open={!!c} title={c?.title} message={c?.message} danger={c?.danger}
+    onConfirm={() => { c.res(true); setC(null); }} onCancel={() => { c?.res(false); setC(null); }} />;
+  return [ask, el];
+}
 
-  /* ─── Subtask CRUD (full properties) ─── */
-  const mkSub=(overrides={})=>({id:uid(),title:"",notes:"",assignee:"",priority:"Medium",taskStatus:"Not Started",due:"",estimatedHours:"",created:td(),...overrides});
-  const addSub=(tid,sub)=>{const t=tasks.find(x=>x.id===tid);if(t)uTask(tid,{subtasks:[...(t.subtasks||[]),mkSub(sub)]});};
-  const updateSub=(tid,sid,u)=>{const t=tasks.find(x=>x.id===tid);if(t)uTask(tid,{subtasks:(t.subtasks||[]).map(s=>s.id===sid?{...s,...u}:s)});};
-  const deleteSub=(tid,sid)=>{const t=tasks.find(x=>x.id===tid);if(t)uTask(tid,{subtasks:(t.subtasks||[]).filter(s=>s.id!==sid)});};
-  const toggleSub=(tid,sid)=>{const t=tasks.find(x=>x.id===tid);const s=(t.subtasks||[]).find(x=>x.id===sid);if(s){const done=s.taskStatus==="Done";updateSub(tid,sid,{taskStatus:done?"In Progress":"Done"});}};
-
-  // Subtask progress for a task
-  const subProg=t=>{const s=t.subtasks||[];if(!s.length)return null;const d=s.filter(x=>x.taskStatus==="Done").length;return{done:d,total:s.length,pct:Math.round((d/s.length)*100)};};
-
-  /* ─── Comments ─── */
-  const addComment=(tid,text)=>{const t=tasks.find(x=>x.id===tid);uTask(tid,{comments:[...(t.comments||[]),{id:uid(),text,author:people[0]||"You",time:now()}]});};
-  const delComment=(tid,cid)=>{const t=tasks.find(x=>x.id===tid);uTask(tid,{comments:(t.comments||[]).filter(c=>c.id!==cid)});};
-
-  /* ─── Files ─── */
-  const addFile=(tid,file)=>{const r=new FileReader();r.onload=()=>{const t=tasks.find(x=>x.id===tid);uTask(tid,{files:[...(t.files||[]),{name:file.name,type:file.type,size:file.size,data:r.result,added:now()}]});};r.readAsDataURL(file);};
-  const rmFile=(tid,fn)=>{const t=tasks.find(x=>x.id===tid);uTask(tid,{files:(t.files||[]).filter(f=>f.name!==fn)});};
-
-  /* ─── Projects ─── */
-  const savePrj=p=>{let np;if(p.id&&projects.find(x=>x.id===p.id))np=projects.map(x=>x.id===p.id?{...x,...p}:x);else np=[...projects,{...p,id:uid()}];save({...data,projects:np});setShowPF(false);setEditP(null);};
-  const delPrj=id=>save({...data,projects:projects.filter(p=>p.id!==id)});
-
-  /* ─── People ─── */
-  const addPerson=n=>{if(n.trim()&&!people.includes(n.trim()))save({...data,people:[...people,n.trim()]});};
-  const rmPerson=n=>save({...data,people:people.filter(p=>p!==n)});
-
-  /* ─── Domains ─── */
-  const addDom=(n,c)=>{if(!n.trim()||domains.find(d=>d.name.toLowerCase()===n.trim().toLowerCase()))return;save({...data,domains:[...domains,{name:n.trim(),color:c}]});};
-  const updDom=(old,nn,nc)=>{const nd=domains.map(d=>d.name===old?{name:nn.trim()||old,color:nc}:d);const nt=old!==nn.trim()?tasks.map(t=>t.domain===old?{...t,domain:nn.trim()}:t):tasks;const np=old!==nn.trim()?projects.map(p=>p.domain===old?{...p,domain:nn.trim()}:p):projects;save({...data,domains:nd,tasks:nt,projects:np});};
-  const rmDom=n=>save({...data,domains:domains.filter(d=>d.name!==n)});
-
-  /* ─── Drag ─── */
-  const onDS=(e,id)=>{dragRef.current=id;e.dataTransfer.effectAllowed="move";};
-  const onDO=e=>e.preventDefault();
-  const onDr=(e,sec)=>{e.preventDefault();if(dragRef.current){mvTask(dragRef.current,sec);dragRef.current=null;}};
-  const setFF=(k,v)=>setFlt({...flt,[k]:v});
-  const aFlts=Object.values(flt).filter(v=>v!=="all"&&v!=="").length;
-
-  /* ═══ TASK CARD ═══ */
-  const TaskCard=({task:t})=>{
-    const sec=SECTION_META[t.section],pri=PRI_M[t.priority||"Medium"],dom=gDC(t.domain),st=STATUS_C[t.taskStatus||"Not Started"];
-    const ov=t.due&&t.section!=="done"&&t.due<td();const sp=subProg(t);
-    const subCnt=(t.subtasks||[]).length,cCnt=(t.comments||[]).length,fCnt=(t.files||[]).length;
-    return<div draggable onDragStart={e=>onDS(e,t.id)} onClick={()=>setDetailT(t)} style={{background:C.sf2,borderRadius:6,padding:"12px 14px",marginBottom:8,borderLeft:`3px solid ${sec.color}`,cursor:"pointer",opacity:t.section==="done"?0.55:1}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
-        <div style={{display:"flex",alignItems:"flex-start",gap:8,flex:1,minWidth:0}}>
-          <input type="checkbox" checked={t.section==="done"} onChange={e=>{e.stopPropagation();mvTask(t.id,t.section==="done"?"active":"done");}} style={{accentColor:C.acc,marginTop:3,flexShrink:0,cursor:"pointer"}} />
-          <div style={{minWidth:0}}><div style={{fontWeight:600,fontSize:13,textDecoration:t.section==="done"?"line-through":"none",wordBreak:"break-word"}}>{t.title}</div>{t.assignee&&t.assignee!=="Unassigned"&&<div style={{fontSize:11,color:C.mut,marginTop:2}}>👤 {t.assignee}</div>}</div>
+/* ═══════════════════════════════════════════════════════════════════
+   AUTH SCREEN
+   ═══════════════════════════════════════════════════════════════════ */
+function AuthScreen({fbConfigured, onSetupClick, onSignIn, err}) {
+  return <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+    <div style={{background:"var(--sf)",border:"1px solid var(--bdr)",borderRadius:14,padding:36,width:"100%",maxWidth:440,textAlign:"center",boxShadow:"var(--shadow-lg)"}}>
+      <div style={{fontSize:44,marginBottom:12}}>⚡</div>
+      <h1 style={{fontSize:24,fontWeight:800,marginBottom:6}}>TaskCommand</h1>
+      <p style={{color:"var(--mut)",fontSize:13,marginBottom:28,lineHeight:1.6}}>Productivity command center for finance & audit workflows.<br/><span style={{fontSize:11,opacity:0.7}}>v{APP_VERSION}</span></p>
+      {!fbConfigured ? <>
+        <div style={{background:"rgba(240,180,41,0.08)",border:"1px solid rgba(240,180,41,0.25)",borderRadius:8,padding:14,marginBottom:20,fontSize:12.5,color:"var(--amb)",textAlign:"left"}}>
+          <strong>First-time setup required.</strong> Connect your Firebase project to enable secure cloud sync.
         </div>
-        <div style={{display:"flex",gap:2,flexShrink:0}}><span style={btnSm(C.mut)} onClick={e=>{e.stopPropagation();setEditT(t);setShowTF(true);}}>✎</span><span style={btnSm(C.red)} onClick={e=>{e.stopPropagation();dTask(t.id);}}>✕</span></div>
-      </div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:4,marginTop:8,marginLeft:26}}>
-        <span style={pill(dom.c,dom.bg)}>{t.domain}</span><span style={pill(pri.color,pri.bg)}>{pri.icon} {t.priority}</span><span style={pill(st.color,st.bg)}>{t.taskStatus||"Not Started"}</span>
-        {ov&&<span style={pill(C.red,"rgba(239,100,97,0.15)")}>⚠ Overdue</span>}
-        {t.due&&!ov&&<span style={{fontSize:10,color:C.mut,padding:"2px 4px"}}>📅 {t.due}</span>}
-      </div>
-      {sp&&<PBar done={sp.done} total={sp.total} />}
-      {(subCnt>0||cCnt>0||fCnt>0)&&<div style={{display:"flex",gap:10,marginTop:8,marginLeft:26,fontSize:11,color:C.mut}}>{subCnt>0&&<span>☑ {sp?sp.done:0}/{subCnt}</span>}{cCnt>0&&<span>💬 {cCnt}</span>}{fCnt>0&&<span>📎 {fCnt}</span>}</div>}
-    </div>;
+        <button onClick={onSetupClick} style={{...btn(),width:"100%",padding:12,fontSize:14}}>Configure Firebase →</button>
+      </> : <>
+        <button onClick={onSignIn} style={{width:"100%",padding:"12px 16px",background:"#fff",color:"#1f1f1f",border:"1px solid #dadce0",borderRadius:8,fontSize:14,fontWeight:600,display:"flex",alignItems:"center",justifyContent:"center",gap:12,cursor:"pointer"}}>
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Sign in with Google
+        </button>
+        {err && <div style={{color:"var(--red)",fontSize:12.5,marginTop:12,padding:"8px 12px",background:"rgba(239,100,97,0.1)",borderRadius:6}}>⚠ {err}</div>}
+        <div style={{marginTop:18,fontSize:11,color:"var(--mut)"}}>
+          <button onClick={onSetupClick} style={{color:"var(--mut)",fontSize:11,textDecoration:"underline"}}>Reconfigure Firebase</button>
+        </div>
+      </>}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FIREBASE SETUP SCREEN
+   ═══════════════════════════════════════════════════════════════════ */
+function SetupScreen({onComplete, onCancel, initial}) {
+  const [cfg, setCfg] = useState(initial || {apiKey:"",authDomain:"",databaseURL:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""});
+  const [paste, setPaste] = useState("");
+  const [err, setErr] = useState("");
+  const [testing, setTesting] = useState(false);
+  const [dbUrlManual, setDbUrlManual] = useState("");
+
+  const parse = text => {
+    if (!text || !text.trim()) return;
+    try {
+      const trimmed = text.trim();
+      if (trimmed.startsWith("{")) { try { const o=JSON.parse(trimmed); if(o.apiKey){applyConfig(o);return;} } catch(e){} }
+      const start = text.indexOf("{");
+      if (start === -1) { setErr("No config object found."); return; }
+      let depth=0, end=-1;
+      for (let i=start;i<text.length;i++){if(text[i]==="{")depth++;else if(text[i]==="}"){depth--;if(depth===0){end=i;break;}}}
+      if (end === -1) { setErr("Unmatched braces in config."); return; }
+      const block = text.slice(start,end+1);
+      try { const o=JSON.parse(block); if(o.apiKey){applyConfig(o);return;} } catch(e){}
+      const lines = block.split("\n");
+      const norm = lines.map(line => line.replace(/^(\s*)(['"]?)(\w+)\2(\s*:\s*)/, (_,ind,_q,key,sep)=>`${ind}"${key}"${sep}`));
+      let js = norm.join("\n").replace(/:\s*'([^']*)'/g,': "$1"').replace(/,(\s*[}\]])/g,"$1");
+      try { const o=JSON.parse(js); if(o.apiKey){applyConfig(o);return;} } catch(e){}
+      const result={}, kvRe=/['"]?(\w+)['"]?\s*:\s*['"]([^'"]*)['"]/g;
+      let m; while((m=kvRe.exec(text))!==null) result[m[1]]=m[2];
+      if (result.apiKey) { applyConfig(result); return; }
+      setErr("Could not parse config. Paste the firebaseConfig object from your Firebase console.");
+    } catch (e) { setErr("Parse error: "+e.message); }
+  };
+  const applyConfig = (obj) => {
+    const c = {apiKey:obj.apiKey||"",authDomain:obj.authDomain||"",databaseURL:obj.databaseURL||"",projectId:obj.projectId||"",storageBucket:obj.storageBucket||"",messagingSenderId:obj.messagingSenderId||"",appId:obj.appId||""};
+    setCfg(c); setErr("");
+    if (!c.databaseURL && c.projectId) setDbUrlManual("https://"+c.projectId+"-default-rtdb.firebaseio.com");
+  };
+  const finalDbUrl = cfg.databaseURL || dbUrlManual;
+  const go = async () => {
+    if (!cfg.apiKey) { setErr("apiKey is required."); return; }
+    if (!finalDbUrl) { setErr("databaseURL is required."); return; }
+    const fullCfg = {...cfg, databaseURL:finalDbUrl};
+    setTesting(true); setErr("");
+    try {
+      const testName = "test-"+Date.now();
+      const a = firebase.initializeApp(fullCfg, testName);
+      const db = firebase.database(a);
+      await Promise.race([
+        db.ref(".info/connected").once("value"),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error("Timeout — verify databaseURL")),8000))
+      ]);
+      await a.delete();
+      localStorage.setItem("tc-firebase-config", JSON.stringify(fullCfg));
+      onComplete(fullCfg);
+    } catch (e) {
+      setErr("Connection failed: "+e.message);
+      setTesting(false);
+    }
   };
 
-  /* ═══ KANBAN COLUMN ═══ */
-  const Col=({section:sec})=>{const m=SECTION_META[sec];const items=aFlt(tasks).filter(t=>t.section===sec);return<div onDragOver={onDO} onDrop={e=>onDr(e,sec)} style={{...cSt,flex:1,minWidth:250,minHeight:140}}>
-    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}><span style={{width:8,height:8,borderRadius:"50%",background:m.color}} /><span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:0.5,color:C.mut}}>{m.label}</span><span style={{marginLeft:"auto",fontSize:13,fontWeight:700,color:m.color}}>{items.length}</span></div>
-    {items.length===0?<div style={{textAlign:"center",padding:20,color:C.mut,fontSize:12,fontStyle:"italic"}}>Drop tasks here</div>:items.map(t=><TaskCard key={t.id} task={t} />)}
-  </div>;};
-
-  /* ═══ SUBTASK FORM MODAL ═══ */
-  const SubFormModal=()=>{
-    const parentId=detailT?.id;
-    const isEdit=!!editSub?.id;
-    const [f,sF]=useState(editSub||{title:"",notes:"",assignee:people[0]||"",priority:"Medium",taskStatus:"Not Started",due:"",estimatedHours:""});
-    const set=(k,v)=>sF({...f,[k]:v});
-    const close=()=>{setShowSubForm(false);setEditSub(null);};
-    return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1100,padding:16}} onClick={close}>
-      <div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:480,maxHeight:"85vh",overflow:"auto"}} onClick={e=>e.stopPropagation()}>
-        <h3 style={{fontSize:16,fontWeight:700,marginBottom:16}}>{isEdit?"Edit Subtask":"New Subtask"}</h3>
-        <div style={{marginBottom:12}}><label style={lSt}>Title *</label><input style={iSt} value={f.title} onChange={e=>set("title",e.target.value)} placeholder="Subtask title" autoFocus /></div>
-        <div style={{marginBottom:12}}><label style={lSt}>Notes</label><textarea style={{...iSt,minHeight:60,resize:"vertical",fontFamily:"inherit"}} value={f.notes||""} onChange={e=>set("notes",e.target.value)} placeholder="Details..." /></div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-          <div style={{marginBottom:12}}><label style={lSt}>Assignee</label><select style={sel} value={f.assignee||""} onChange={e=>set("assignee",e.target.value)}><option value="">Unassigned</option>{people.map(p=><option key={p}>{p}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Priority</label><select style={sel} value={f.priority||"Medium"} onChange={e=>set("priority",e.target.value)}>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Status</label><select style={sel} value={f.taskStatus||"Not Started"} onChange={e=>set("taskStatus",e.target.value)}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Due Date</label><input style={iSt} type="date" value={f.due||""} onChange={e=>set("due",e.target.value)} /></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Est. Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.estimatedHours||""} onChange={e=>set("estimatedHours",e.target.value)} /></div>
-        </div>
-        <div style={{display:"flex",gap:8,justifyContent:"flex-end",marginTop:6}}>
-          <button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={close}>Cancel</button>
-          <button style={btn()} onClick={()=>{if(!f.title.trim())return;if(isEdit){updateSub(parentId,f.id,f);}else{addSub(parentId,f);}close();}}>{isEdit?"Update":"Add Subtask"}</button>
-        </div>
+  return <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+    <div style={{background:"var(--sf)",border:"1px solid var(--bdr)",borderRadius:14,padding:32,width:"100%",maxWidth:600,boxShadow:"var(--shadow-lg)"}}>
+      <div style={{textAlign:"center",marginBottom:24}}>
+        <div style={{fontSize:36,marginBottom:8}}>⚡</div>
+        <h1 style={{fontSize:22,fontWeight:800,marginBottom:4}}>Configure Firebase</h1>
+        <p style={{color:"var(--mut)",fontSize:13}}>One-time setup — takes 5 minutes.</p>
       </div>
-    </div>;
+      <div style={{background:"var(--sf2)",borderRadius:8,padding:14,marginBottom:18,fontSize:12.5,color:"var(--txt2)",lineHeight:1.7}}>
+        <strong style={{color:"var(--txt)"}}>Quick steps:</strong><br/>
+        1. <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a> → your project<br/>
+        2. <strong>Build → Realtime Database</strong> → Create Database (any region)<br/>
+        3. <strong>Build → Authentication → Sign-in method → Google</strong> → Enable<br/>
+        4. <strong>⚙ Project Settings → General → Your apps → Web (&lt;/&gt;)</strong> → Register<br/>
+        5. Copy the <code style={{background:"var(--sf3)",padding:"1px 5px",borderRadius:3}}>firebaseConfig</code> block and paste below<br/>
+        6. Deploy the security rules from README before signing in
+      </div>
+      <div style={{marginBottom:14}}>
+        <label style={lSt}>Paste Firebase Config</label>
+        <textarea style={{...iSt,minHeight:120,fontFamily:"'JetBrains Mono',ui-monospace,monospace",fontSize:12,resize:"vertical"}}
+          placeholder={'const firebaseConfig = {\n  apiKey: "AIzaSy...",\n  authDomain: "myapp.firebaseapp.com",\n  databaseURL: "https://myapp-default-rtdb.firebaseio.com",\n  projectId: "myapp"\n};'}
+          value={paste} onChange={e=>{setPaste(e.target.value);parse(e.target.value);}} />
+      </div>
+      {cfg.apiKey && <div style={{background:"var(--sf2)",borderRadius:6,padding:12,marginBottom:14,fontSize:12}}>
+        <div style={{color:"var(--grn)",fontWeight:600,marginBottom:6}}>✓ Config parsed</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 12px",color:"var(--mut)"}}>
+          <div>apiKey: <strong style={{color:"var(--txt)"}}>{cfg.apiKey.slice(0,16)}…</strong></div>
+          <div>projectId: <strong style={{color:"var(--txt)"}}>{cfg.projectId||"—"}</strong></div>
+          <div>authDomain: <strong style={{color:"var(--txt)"}}>{cfg.authDomain||"—"}</strong></div>
+          <div>appId: <strong style={{color:"var(--txt)"}}>{cfg.appId?cfg.appId.slice(0,20)+"…":"—"}</strong></div>
+        </div>
+        <div style={{marginTop:6}}>databaseURL: <strong style={{color:finalDbUrl?"var(--grn)":"var(--red)"}}>{finalDbUrl||"⚠ Missing"}</strong></div>
+      </div>}
+      {cfg.apiKey && !cfg.databaseURL && <div style={{marginBottom:14}}>
+        <label style={lSt}>Database URL (manual entry)</label>
+        <input style={iSt} value={dbUrlManual} onChange={e=>setDbUrlManual(e.target.value)}
+          placeholder="https://your-project-default-rtdb.firebaseio.com" />
+      </div>}
+      {err && <div style={{color:"var(--red)",fontSize:13,marginBottom:12,padding:"8px 12px",background:"rgba(239,100,97,0.1)",borderRadius:6}}>⚠ {err}</div>}
+      <div style={{display:"flex",gap:8}}>
+        {onCancel && <button onClick={onCancel} style={{...btn("var(--mut)","139,143,163"),flex:"0 0 auto"}}>Cancel</button>}
+        <button style={{...btn(),flex:1,padding:12,fontSize:14,opacity:(!cfg.apiKey||testing)?0.5:1}}
+          onClick={go} disabled={!cfg.apiKey||testing}>
+          {testing ? "Testing connection…" : "Test & Save"}
+        </button>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RECURRENCE ENGINE
+   ═══════════════════════════════════════════════════════════════════ */
+function generateNextDue(task) {
+  const rec = task.recurrence;
+  if (!rec || rec === "none") return null;
+  const base = task.due || td();
+  const d = new Date(base);
+  switch(rec) {
+    case "daily":     return addDays(base, 1);
+    case "weekly":    return addDays(base, 7);
+    case "biweekly":  return addDays(base, 14);
+    case "monthly":   return addMonths(base, 1);
+    case "month-end": return lastBusinessDay(d.getFullYear(), d.getMonth()+1);
+    case "quarterly": return addMonths(base, 3);
+    case "yearly":    return addMonths(base, 12);
+    default: return null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN APP
+   ═══════════════════════════════════════════════════════════════════ */
+function App() {
+  const [fbCfg, setFbCfg] = useState(undefined); // undefined=loading, null=not configured, obj=configured
+  const [showSetup, setShowSetup] = useState(false);
+  const [user, setUser] = useState(undefined); // undefined=loading, null=signed out, obj=signed in
+  const [authErr, setAuthErr] = useState("");
+  const [data, setData] = useState(null);
+  const [sync, setSync] = useState("offline");
+  const [theme, setTheme] = useTheme();
+  const {toasts, push: toast, dismiss: dismissToast} = useToasts();
+  const [confirm, confirmEl] = useConfirm();
+
+  const VALID_VIEWS = ["dashboard","board","list","calendar","projects","reports"];
+  const [view, setView] = useState(() => {
+    const h = window.location.hash.replace("#","");
+    return VALID_VIEWS.includes(h) ? h : "board";
+  });
+  useEffect(() => { if (view && "#"+view !== window.location.hash) window.location.hash = "#" + view; }, [view]);
+  useEffect(() => {
+    const onHash = () => { const v = window.location.hash.replace("#",""); if (VALID_VIEWS.includes(v)) setView(v); };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const [showTF, setShowTF] = useState(false);
+  const [editT, setEditT] = useState(null);
+  const [detailT, setDetailT] = useState(null);
+  const [showPF, setShowPF] = useState(false);
+  const [editP, setEditP] = useState(null);
+  const [showPM, setShowPM] = useState(false);
+  const [showDM, setShowDM] = useState(false);
+  const [showSet, setShowSet] = useState(false);
+  const [showCmd, setShowCmd] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showSubForm, setShowSubForm] = useState(false);
+  const [editSub, setEditSub] = useState(null);
+  const [subDetailId, setSubDetailId] = useState(null);
+  const [selected, setSelected] = useState(new Set());
+  const [sortBy, setSortBy] = useState("priority");
+
+  const [flt, setFlt] = useState({section:"all",domain:"all",assignee:"all",status:"all",priority:"all",dueGroup:"all",project:"all",search:""});
+  const dbRef = useRef(null);
+  const authRef = useRef(null);
+  const searchRef = useRef(null);
+  const dragRef = useRef(null);
+  const skipSync = useRef(false);
+
+  // ─── Load Firebase config from localStorage ───
+  useEffect(() => {
+    const s = localStorage.getItem("tc-firebase-config");
+    if (s) { try { setFbCfg(JSON.parse(s)); } catch { setFbCfg(null); } }
+    else setFbCfg(null);
+  }, []);
+
+  // ─── Initialize Firebase app + auth listener ───
+  useEffect(() => {
+    if (!fbCfg) { setUser(null); return; }
+    try {
+      const existing = firebase.apps.find(a => a.name === "tc");
+      const app = existing || firebase.initializeApp(fbCfg, "tc");
+      const auth = firebase.auth(app);
+      authRef.current = auth;
+      const unsub = auth.onAuthStateChanged(u => {
+        setUser(u || null);
+        setAuthErr("");
+      }, e => setAuthErr(e.message));
+      return () => unsub();
+    } catch (e) {
+      setAuthErr("Firebase init failed: "+e.message);
+      setUser(null);
+    }
+  }, [fbCfg]);
+
+  // ─── Data listener (scoped to user UID) ───
+  useEffect(() => {
+    if (!user || !fbCfg) return;
+    try {
+      const app = firebase.apps.find(a => a.name === "tc");
+      const db = firebase.database(app);
+      const ref = db.ref(`users/${user.uid}`);
+      dbRef.current = ref;
+      setSync("syncing");
+      const onVal = snap => {
+        if (skipSync.current) { skipSync.current = false; return; }
+        const v = snap.val();
+        if (v) {
+          setData(hydrate(v));
+          setSync("synced");
+        } else {
+          // First-time: try v1 migration, else seed defaults
+          maybeMigrateOrSeed(db, user);
+        }
+      };
+      ref.on("value", onVal, e => { setSync("error"); toast("Sync error: "+e.message, {type:"error"}); });
+      const connRef = db.ref(".info/connected");
+      const onConn = s => { if (s.val()===true) setSync(prev => prev==="error" ? prev : "synced"); else setSync("offline"); };
+      connRef.on("value", onConn);
+      return () => { ref.off("value", onVal); connRef.off("value", onConn); };
+    } catch (e) {
+      setSync("error");
+      toast("DB attach failed: "+e.message, {type:"error"});
+    }
+  }, [user, fbCfg]);
+
+  const hydrate = v => ({
+    tasks: v.tasks || [],
+    projects: v.projects || [],
+    people: v.people || ["Me"],
+    domains: v.domains || DEF_DOMAINS,
+    savedViews: v.savedViews || SAVED_VIEW_DEFAULTS,
+    activity: v.activity || [],
+    settings: v.settings || {}
+  });
+
+  const maybeMigrateOrSeed = async (db, u) => {
+    try {
+      const old = await db.ref("taskcommand").once("value");
+      const oldVal = old.val();
+      if (oldVal && oldVal.tasks && oldVal.tasks.length) {
+        const doMigrate = await confirm({
+          title: "Import v1 data?",
+          message: `We found existing TaskCommand v1 data (${oldVal.tasks.length} tasks, ${(oldVal.projects||[]).length} projects). Import it now? The old data will remain in place — you can delete it later from Settings.`,
+        });
+        if (doMigrate) {
+          const migrated = hydrate({...oldVal, activity:[{id:uid(),type:"migrated",time:nowIso(),detail:`Imported ${(oldVal.tasks||[]).length} tasks from v1`}]});
+          // Strip base64 file data from migrated tasks (files metadata kept)
+          migrated.tasks = migrated.tasks.map(t => ({
+            ...t,
+            updatedAt: t.updatedAt || nowIso(),
+            createdAt: t.createdAt || (t.created ? new Date(t.created).toISOString() : nowIso()),
+            files: (t.files||[]).map(f => ({name:f.name,type:f.type,size:f.size,added:f.added,removed:true}))
+          }));
+          await db.ref(`users/${u.uid}`).set(migrated);
+          toast("v1 data imported ("+migrated.tasks.length+" tasks). File attachments were removed for security — re-attach via external URL if needed.", {type:"success", duration:8000});
+          return;
+        }
+      }
+    } catch (e) { /* No v1 data or no permission — proceed to seed */ }
+
+    const seed = {
+      tasks: [],
+      projects: DEF_PROJECTS.map(p => ({...p, id:uid()})),
+      people: [u.displayName || "Me"],
+      domains: DEF_DOMAINS,
+      savedViews: SAVED_VIEW_DEFAULTS,
+      activity: [{id:uid(),type:"created",time:nowIso(),detail:"Workspace initialized"}],
+      settings: {}
+    };
+    await db.ref(`users/${u.uid}`).set(seed);
+    toast("Welcome, "+(u.displayName||u.email)+"! Your workspace is ready.", {type:"success"});
   };
 
-  /* ═══ DETAIL PANEL ═══ */
-  const DetailPanel=()=>{
-    const t=tasks.find(x=>x.id===detailT?.id);if(!t)return null;
-    const [newComment,setNC]=useState("");const [quickSub,setQS]=useState("");
-    const fileRef=useRef(null);
-    const sec=SECTION_META[t.section],pri=PRI_M[t.priority||"Medium"],dom=gDC(t.domain),st=STATUS_C[t.taskStatus||"Not Started"];
-    const subs=t.subtasks||[];const sp=subProg(t);
-    const expandedSub=subDetailId?subs.find(s=>s.id===subDetailId):null;
+  // ─── Save (debounced) ───
+  const doSave = useCallback((nd) => {
+    if (!dbRef.current) return;
+    setSync("syncing");
+    skipSync.current = true;
+    dbRef.current.set(nd).then(() => setSync("synced")).catch(e => { setSync("error"); toast("Save failed: "+e.message, {type:"error"}); });
+  }, [toast]);
+  const debouncedSaveRef = useRef(null);
+  useEffect(() => { debouncedSaveRef.current = debounce(doSave, 400); }, [doSave]);
+  const save = useCallback((nd, {immediate=false} = {}) => {
+    const clean = JSON.parse(JSON.stringify(nd));
+    setData(clean);
+    if (immediate) doSave(clean); else debouncedSaveRef.current?.(clean);
+  }, [doSave]);
 
-    return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",justifyContent:"flex-end",zIndex:1000}} onClick={()=>{setDetailT(null);setSubDetailId(null);}}>
-      <div style={{background:C.sf,borderLeft:`1px solid ${C.bdr}`,width:"100%",maxWidth:560,height:"100%",overflow:"auto",padding:"24px 20px"}} onClick={e=>e.stopPropagation()}>
-        {/* Header */}
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
-          <div style={{flex:1}}><h2 style={{fontSize:18,fontWeight:700,margin:0,wordBreak:"break-word"}}>{t.title}</h2>
-            <div style={{display:"flex",flexWrap:"wrap",gap:4,marginTop:8}}><span style={pill(dom.c,dom.bg)}>{t.domain}</span><span style={pill(pri.color,pri.bg)}>{pri.icon} {t.priority}</span><span style={pill(st.color,st.bg)}>{t.taskStatus||"Not Started"}</span><span style={pill(sec.color,sec.bg)}>{sec.icon} {sec.label}</span></div>
+  const logActivity = useCallback((type, detail, taskId) => {
+    if (!data) return;
+    const activity = [...(data.activity||[]), {id:uid(), type, detail, taskId, time:nowIso()}].slice(-500);
+    return {...data, activity};
+  }, [data]);
+
+  // ─── Sign in / out ───
+  const signIn = async () => {
+    if (!authRef.current) return;
+    setAuthErr("");
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      await authRef.current.signInWithPopup(provider);
+    } catch (e) { setAuthErr(e.message); }
+  };
+  const signOut = async () => {
+    if (!authRef.current) return;
+    await authRef.current.signOut();
+    setData(null);
+  };
+
+  // ─── Recurring task generator (runs once per session per day) ───
+  useEffect(() => {
+    if (!data || !dbRef.current) return;
+    const lastRun = localStorage.getItem("tc-recur-last");
+    if (lastRun === td()) return;
+    const today = td();
+    const newTasks = [];
+    (data.tasks || []).forEach(t => {
+      if (t.recurrence && t.recurrence !== "none" && t.section === "done" && !t.recurred) {
+        const nextDue = generateNextDue(t);
+        if (nextDue) {
+          newTasks.push({...t, id:uid(), section:"active", due:nextDue, completed:null,
+            taskStatus:"Not Started", createdAt:nowIso(), updatedAt:nowIso(),
+            subtasks:(t.subtasks||[]).map(s=>({...s,id:uid(),taskStatus:"Not Started"})),
+            comments:[], files:[], recurredFrom:t.id});
+        }
+      }
+    });
+    if (newTasks.length) {
+      const marked = data.tasks.map(t => newTasks.find(n=>n.recurredFrom===t.id) ? {...t, recurred:true} : t);
+      save({...logActivity("recurred", `Generated ${newTasks.length} recurring task(s)`), tasks:[...marked, ...newTasks]}, {immediate:true});
+      toast(`Generated ${newTasks.length} recurring task(s)`, {type:"success"});
+    }
+    localStorage.setItem("tc-recur-last", today);
+  }, [data, save, logActivity, toast]);
+
+  // ─── Keyboard shortcuts ───
+  useEffect(() => {
+    const onKey = e => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") {
+        if (e.key === "Escape") e.target.blur();
+        return;
+      }
+      if ((e.metaKey||e.ctrlKey) && e.key === "k") { e.preventDefault(); setShowCmd(true); return; }
+      if (e.key === "?") { setShowShortcuts(true); return; }
+      if (e.key === "/") { e.preventDefault(); searchRef.current?.focus(); return; }
+      if (e.key === "n" && !e.metaKey && !e.ctrlKey) { setEditT(null); setShowTF(true); return; }
+      const nav = {"1":"dashboard","2":"board","3":"list","4":"calendar","5":"projects","6":"reports"};
+      if (nav[e.key]) setView(nav[e.key]);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // ─── Callbacks (must be declared before any early return per Rules of Hooks) ───
+  const filterTasks = useCallback(list => list.filter(t => {
+    const f = flt;
+    if (f.section !== "all" && t.section !== f.section) return false;
+    if (f.domain !== "all" && t.domain !== f.domain) return false;
+    if (f.assignee !== "all" && t.assignee !== f.assignee) return false;
+    if (f.status !== "all" && t.taskStatus !== f.status) return false;
+    if (f.priority !== "all" && t.priority !== f.priority) return false;
+    if (f.project !== "all" && t.project !== f.project) return false;
+    if (f.dueGroup && f.dueGroup !== "all" && dueBucket(t) !== f.dueGroup) return false;
+    if (f.search) {
+      const q = f.search.toLowerCase();
+      const hay = [t.title, t.notes, t.assignee, t.project, ...(t.subtasks||[]).map(s => s.title)].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }), [flt]);
+
+  const sortTasks = useCallback(list => {
+    const sorted = [...list];
+    if (sortBy === "priority") sorted.sort((a,b) => priorityScore(b) - priorityScore(a));
+    else if (sortBy === "due") sorted.sort((a,b) => (a.due||"9999")<(b.due||"9999")?-1:1);
+    else if (sortBy === "created") sorted.sort((a,b) => (b.createdAt||"") > (a.createdAt||"") ? 1 : -1);
+    else if (sortBy === "title") sorted.sort((a,b) => (a.title||"").localeCompare(b.title||""));
+    else if (sortBy === "updated") sorted.sort((a,b) => (b.updatedAt||"") > (a.updatedAt||"") ? 1 : -1);
+    return sorted;
+  }, [sortBy]);
+
+  // ─── Loading & auth gates ───
+  if (fbCfg === undefined || user === undefined) {
+    return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)"}}>
+      <div style={{textAlign:"center"}}><div style={{fontSize:32,marginBottom:8}} className="spin">◐</div><div>Loading…</div></div>
+    </div>;
+  }
+  if (showSetup || (fbCfg === null && !user)) {
+    return <SetupScreen initial={fbCfg} onComplete={c => { setFbCfg(c); setShowSetup(false); }} onCancel={fbCfg ? () => setShowSetup(false) : null} />;
+  }
+  if (!user) {
+    return <AuthScreen fbConfigured={!!fbCfg} onSetupClick={() => setShowSetup(true)} onSignIn={signIn} err={authErr} />;
+  }
+  if (!data) {
+    return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"var(--bg)",color:"var(--mut)",flexDirection:"column",gap:12}}>
+      <div style={{fontSize:32}} className="spin">◐</div>
+      <div>Loading your workspace…</div>
+      <SyncBadge status={sync} />
+    </div>;
+  }
+
+  /* ──────────────────────────────────────────────────
+     ─── DATA-DERIVED VALUES ───
+     ────────────────────────────────────────────────── */
+  const {tasks=[], projects=[], people=[], domains=DEF_DOMAINS, savedViews=SAVED_VIEW_DEFAULTS, activity=[]} = data;
+  const dNames = domains.map(d => d.name);
+  const gDC = name => {
+    const d = domains.find(x => x.name === name);
+    return d ? {c:d.color, raw:hexToRaw(d.color), bg:hexBg(d.color,0.14)} : {c:"#8b8fa3", raw:"139,143,163", bg:"rgba(139,143,163,0.14)"};
+  };
+
+  const activeTasks = tasks.filter(t => t.section !== "done");
+  const counts = Object.fromEntries(SECTIONS.map(s => [s, tasks.filter(t => t.section === s).length]));
+  const overdue = tasks.filter(isOverdue);
+  const dueToday = tasks.filter(t => t.section !== "done" && t.due === td());
+  const dueThisWeek = tasks.filter(t => t.section !== "done" && dueBucket(t) === "week");
+
+  const filtered = sortTasks(filterTasks(tasks));
+  const aFlts = Object.entries(flt).filter(([k,v]) => v !== "all" && v !== "").length;
+
+  /* ── Task CRUD (with activity log + timestamps) ── */
+  const nowStamp = () => nowIso();
+  const uTask = (id, u, actType, actDetail) => {
+    const nt = tasks.map(t => t.id === id ? {...t, ...u, updatedAt:nowStamp()} : t);
+    let nd = {...data, tasks:nt};
+    if (actType) nd = {...nd, activity:[...(data.activity||[]), {id:uid(),type:actType,taskId:id,detail:actDetail||"",time:nowStamp()}].slice(-500)};
+    save(nd);
+    if (detailT?.id === id) setDetailT({...detailT, ...u});
+  };
+  const aTask = t => {
+    const newT = {...t, id:uid(), createdAt:nowStamp(), updatedAt:nowStamp(),
+      subtasks:t.subtasks||[], comments:[], files:[],
+      taskStatus:t.taskStatus || "Not Started"};
+    const nd = {...data, tasks:[...tasks, newT],
+      activity:[...(data.activity||[]), {id:uid(),type:"created",taskId:newT.id,detail:`Created “${newT.title}”`,time:nowStamp()}].slice(-500)};
+    save(nd);
+    setShowTF(false); setEditT(null);
+    toast(`Created "${newT.title}"`, {type:"success"});
+  };
+  const sEditTask = t => {
+    const nt = tasks.map(x => x.id === t.id ? {...x, ...t, updatedAt:nowStamp()} : x);
+    const nd = {...data, tasks:nt,
+      activity:[...(data.activity||[]), {id:uid(),type:"updated",taskId:t.id,detail:`Edited “${t.title}”`,time:nowStamp()}].slice(-500)};
+    save(nd);
+    setShowTF(false); setEditT(null);
+    if (detailT?.id === t.id) setDetailT({...detailT, ...t});
+  };
+  const dTask = async (id) => {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+    if (!await confirm({title:"Delete task?", message:`Delete “${t.title}”? This cannot be undone.`, danger:true})) return;
+    const nd = {...data, tasks:tasks.filter(x => x.id !== id),
+      activity:[...(data.activity||[]), {id:uid(),type:"deleted",taskId:id,detail:`Deleted “${t.title}”`,time:nowStamp()}].slice(-500)};
+    save(nd);
+    if (detailT?.id === id) setDetailT(null);
+    toast(`Deleted "${t.title}"`, {type:"warn", action:{label:"Undo", onClick:()=>{ save({...data, tasks:[...data.tasks]}); }}});
+  };
+  const mvTask = (id, to) => {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+    const u = {section:to, updatedAt:nowStamp()};
+    if (to === "done") { u.completed = td(); u.completedAt = nowStamp(); u.taskStatus = "Done"; }
+    else { u.completed = null; }
+    uTask(id, u, "moved", `Moved “${t.title}” to ${SECTION_META[to].label}`);
+  };
+  const bulkMove = (to) => {
+    if (!selected.size) return;
+    let nt = tasks.map(t => selected.has(t.id) ? {...t, section:to, updatedAt:nowStamp(),
+      ...(to==="done" ? {completed:td(),completedAt:nowStamp(),taskStatus:"Done"} : {})} : t);
+    save({...data, tasks:nt, activity:[...(data.activity||[]),
+      {id:uid(),type:"bulk-moved",detail:`Moved ${selected.size} tasks to ${SECTION_META[to].label}`,time:nowStamp()}].slice(-500)});
+    setSelected(new Set());
+    toast(`Moved ${selected.size} tasks`, {type:"success"});
+  };
+  const bulkDelete = async () => {
+    if (!selected.size) return;
+    if (!await confirm({title:"Delete tasks?", message:`Delete ${selected.size} selected task(s)? This cannot be undone.`, danger:true})) return;
+    save({...data, tasks:tasks.filter(t => !selected.has(t.id)),
+      activity:[...(data.activity||[]), {id:uid(),type:"bulk-deleted",detail:`Deleted ${selected.size} tasks`,time:nowStamp()}].slice(-500)});
+    toast(`Deleted ${selected.size} tasks`, {type:"warn"});
+    setSelected(new Set());
+  };
+
+  /* ── Subtasks ── */
+  const mkSub = (o={}) => ({id:uid(),title:"",notes:"",assignee:"",priority:"Medium",taskStatus:"Not Started",due:"",estimatedHours:"",actualHours:"",createdAt:nowStamp(),...o});
+  const addSub = (tid, sub) => { const t = tasks.find(x=>x.id===tid); if(t) uTask(tid, {subtasks:[...(t.subtasks||[]), mkSub(sub)]}); };
+  const updateSub = (tid, sid, u) => { const t = tasks.find(x=>x.id===tid); if(t) uTask(tid, {subtasks:(t.subtasks||[]).map(s=>s.id===sid?{...s,...u}:s)}); };
+  const deleteSub = (tid, sid) => { const t = tasks.find(x=>x.id===tid); if(t) uTask(tid, {subtasks:(t.subtasks||[]).filter(s=>s.id!==sid)}); };
+  const toggleSub = (tid, sid) => { const t = tasks.find(x=>x.id===tid); const s = (t.subtasks||[]).find(x=>x.id===sid); if(s){ updateSub(tid,sid,{taskStatus:s.taskStatus==="Done"?"In Progress":"Done"}); } };
+  const subProg = t => { const s = t.subtasks||[]; if(!s.length) return null; const d = s.filter(x=>x.taskStatus==="Done").length; return {done:d, total:s.length, pct:Math.round((d/s.length)*100)}; };
+
+  /* ── Comments ── */
+  const addComment = (tid, text) => { const t = tasks.find(x=>x.id===tid); uTask(tid,{comments:[...(t.comments||[]),{id:uid(),text,author:user.displayName||user.email,time:nowH()}]}); };
+  const delComment = (tid, cid) => { const t = tasks.find(x=>x.id===tid); uTask(tid,{comments:(t.comments||[]).filter(c=>c.id!==cid)}); };
+
+  /* ── Files (external URL only — no base64) ── */
+  const addLink = (tid, url, name) => { const t = tasks.find(x=>x.id===tid); uTask(tid,{files:[...(t.files||[]),{id:uid(),name:name||url,url,added:nowH()}]}); };
+  const rmFile = (tid, fid) => { const t = tasks.find(x=>x.id===tid); uTask(tid,{files:(t.files||[]).filter(f=>f.id!==fid)}); };
+
+  /* ── Projects ── */
+  const savePrj = p => {
+    let np;
+    if (p.id && projects.find(x => x.id === p.id)) np = projects.map(x => x.id === p.id ? {...x, ...p, updatedAt:nowStamp()} : x);
+    else np = [...projects, {...p, id:uid(), createdAt:nowStamp()}];
+    save({...data, projects:np});
+    setShowPF(false); setEditP(null);
+  };
+  const delPrj = async id => {
+    const p = projects.find(x => x.id === id);
+    if (!p) return;
+    if (!await confirm({title:"Delete project?", message:`Delete “${p.name}”? Existing tasks under this project will remain but lose the project reference.`, danger:true})) return;
+    save({...data, projects:projects.filter(x => x.id !== id)});
+  };
+
+  /* ── People / Domains ── */
+  const addPerson = n => { if(n.trim() && !people.includes(n.trim())) save({...data, people:[...people, n.trim()]}); };
+  const rmPerson = n => save({...data, people:people.filter(p => p !== n)});
+  const addDom = (n, c) => { if(!n.trim() || domains.find(d => d.name.toLowerCase() === n.trim().toLowerCase())) return; save({...data, domains:[...domains, {name:n.trim(), color:c}]}); };
+  const updDom = (old, nn, nc) => {
+    const nd = domains.map(d => d.name === old ? {name:nn.trim() || old, color:nc} : d);
+    const nt = old !== nn.trim() ? tasks.map(t => t.domain === old ? {...t, domain:nn.trim()} : t) : tasks;
+    const np = old !== nn.trim() ? projects.map(p => p.domain === old ? {...p, domain:nn.trim()} : p) : projects;
+    save({...data, domains:nd, tasks:nt, projects:np});
+  };
+  const rmDom = n => save({...data, domains:domains.filter(d => d.name !== n)});
+
+  /* ── Saved Views ── */
+  const applySavedView = v => { setFlt({...flt, ...v.filter}); };
+  const saveCurrentView = name => { save({...data, savedViews:[...savedViews, {id:uid(), name, filter:flt}]}); toast(`Saved view "${name}"`, {type:"success"}); };
+  const delSavedView = id => save({...data, savedViews:savedViews.filter(v => v.id !== id)});
+
+  /* ── Drag ── */
+  const onDS = (e, id) => { dragRef.current = id; e.dataTransfer.effectAllowed = "move"; };
+  const onDO = e => e.preventDefault();
+  const onDr = (e, sec) => { e.preventDefault(); if (dragRef.current) { mvTask(dragRef.current, sec); dragRef.current = null; } };
+  const setFF = (k, v) => setFlt({...flt, [k]:v});
+
+  /* ── Filter reset ── */
+  const resetFilters = () => setFlt({section:"all",domain:"all",assignee:"all",status:"all",priority:"all",dueGroup:"all",project:"all",search:""});
+
+  /* ── Export ── */
+  const exportCsv = () => {
+    const cols = ["Title","Section","Status","Priority","Domain","Project","Assignee","Start Date","Due Date","Est. Hours","Actual Hours","Subtasks Done","Subtasks Total","Created","Completed","Notes"];
+    const rows = filtered.map(t => {
+      const sp = subProg(t);
+      return [t.title, SECTION_META[t.section]?.label, t.taskStatus, t.priority, t.domain, t.project, t.assignee, t.startDate, t.due, t.estimatedHours, t.actualHours, sp?.done||0, sp?.total||0, t.createdAt?.slice(0,10)||t.created, t.completed, t.notes];
+    });
+    const csv = [cols, ...rows].map(r => r.map(csvEscape).join(",")).join("\n");
+    downloadBlob("﻿"+csv, `taskcommand-${td()}.csv`, "text/csv;charset=utf-8");
+    toast("CSV exported", {type:"success"});
+  };
+  const exportBackup = () => { downloadBlob(JSON.stringify(data, null, 2), `taskcommand-backup-${td()}.json`); toast("Backup exported", {type:"success"}); };
+
+  /* ═══════════════════════════════════════════════════════════════════
+     RENDER
+     ═══════════════════════════════════════════════════════════════════ */
+  const ctx = {
+    user, data, save, tasks, projects, people, domains, savedViews, activity,
+    dNames, gDC, subProg, filterTasks, sortTasks, uTask, aTask, sEditTask, dTask, mvTask,
+    addSub, updateSub, deleteSub, toggleSub, addComment, delComment, addLink, rmFile,
+    setDetailT, detailT, setEditT, setShowTF, setEditSub, setShowSubForm, setSubDetailId, subDetailId,
+    selected, setSelected, sortBy, setSortBy,
+    flt, setFlt, setFF, resetFilters, aFlts,
+    onDS, onDO, onDr, td: td(),
+    toast, confirm, filtered
+  };
+
+  return <AppContext.Provider value={ctx}>
+    <div style={{background:"var(--bg)",color:"var(--txt)",minHeight:"100vh"}}>
+      <TopBar view={view} setView={setView} sync={sync} theme={theme} setTheme={setTheme} user={user}
+        onNewTask={()=>{setEditT(null);setShowTF(true);}} onCommand={()=>setShowCmd(true)}
+        onSettings={()=>setShowSet(true)} searchRef={searchRef}
+        overdueCount={overdue.length} todayCount={dueToday.length} weekCount={dueThisWeek.length} />
+
+      <main style={{padding:"16px 20px 40px",maxWidth:1600,margin:"0 auto"}}>
+        <FilterBar />
+        <SavedViewBar apply={applySavedView} save={saveCurrentView} del={delSavedView} />
+        {selected.size > 0 && <BulkActionBar count={selected.size} onMove={bulkMove} onDelete={bulkDelete} onClear={()=>setSelected(new Set())} />}
+
+        {view === "dashboard" && <DashboardView />}
+        {view === "board"     && <BoardView />}
+        {view === "list"      && <ListView />}
+        {view === "calendar"  && <CalendarView />}
+        {view === "projects"  && <ProjectsView onNew={()=>{setEditP(null);setShowPF(true);}} onEdit={p=>{setEditP(p);setShowPF(true);}} onDelete={delPrj} />}
+        {view === "reports"   && <ReportsView activity={activity} exportCsv={exportCsv} exportBackup={exportBackup} />}
+      </main>
+
+      <footer className="no-print" style={{padding:"12px 20px",borderTop:"1px solid var(--bdr)",fontSize:11,color:"var(--mut)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+        <span>TaskCommand v{APP_VERSION} · Press <kbd>?</kbd> for shortcuts</span>
+        <SyncBadge status={sync} />
+      </footer>
+
+      <TaskFormModal open={showTF} onClose={()=>{setShowTF(false);setEditT(null);}} initial={editT} onSave={editT?.id?sEditTask:aTask} />
+      <DetailPanel open={!!detailT} onClose={()=>{setDetailT(null);setSubDetailId(null);}} />
+      <SubFormModal open={showSubForm && detailT} onClose={()=>{setShowSubForm(false);setEditSub(null);}} parentId={detailT?.id} initial={editSub} onAdd={addSub} onUpdate={updateSub} />
+      <ProjFormModal open={showPF} onClose={()=>{setShowPF(false);setEditP(null);}} initial={editP} onSave={savePrj} />
+      <PeopleModal open={showPM} onClose={()=>setShowPM(false)} onAdd={addPerson} onRemove={rmPerson} />
+      <DomainModal open={showDM} onClose={()=>setShowDM(false)} onAdd={addDom} onUpdate={updDom} onRemove={rmDom} />
+      <SettingsModal open={showSet} onClose={()=>setShowSet(false)} onSignOut={signOut} onReconfigureFirebase={()=>{setShowSet(false);setShowSetup(true);}}
+        onManagePeople={()=>{setShowSet(false);setShowPM(true);}} onManageDomains={()=>{setShowSet(false);setShowDM(true);}}
+        exportBackup={exportBackup} exportCsv={exportCsv} theme={theme} setTheme={setTheme} />
+      <CommandPalette open={showCmd} onClose={()=>setShowCmd(false)} setView={setView}
+        actions={{newTask:()=>{setEditT(null);setShowTF(true);}, settings:()=>setShowSet(true), theme:()=>setTheme(theme==="dark"?"light":"dark"), signOut, export:exportCsv, backup:exportBackup, people:()=>setShowPM(true), domains:()=>setShowDM(true)}} />
+      <ShortcutsModal open={showShortcuts} onClose={()=>setShowShortcuts(false)} />
+
+      <ToastStack toasts={toasts} dismiss={dismissToast} />
+      {confirmEl}
+    </div>
+  </AppContext.Provider>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TOPBAR
+   ═══════════════════════════════════════════════════════════════════ */
+function TopBar({view, setView, sync, theme, setTheme, user, onNewTask, onCommand, onSettings, searchRef, overdueCount, todayCount, weekCount}) {
+  const {flt, setFF, aFlts, tasks} = useApp();
+  const tabs = [
+    {id:"dashboard", l:"Dashboard", i:"◉", k:"1"},
+    {id:"board",     l:"Board",     i:"▦", k:"2"},
+    {id:"list",      l:"List",      i:"☰", k:"3"},
+    {id:"calendar",  l:"Calendar",  i:"📅", k:"4"},
+    {id:"projects",  l:"Projects",  i:"◆", k:"5"},
+    {id:"reports",   l:"Reports",   i:"📊", k:"6"}
+  ];
+  return <header className="no-print" style={{position:"sticky",top:0,zIndex:100,background:"var(--bg)",borderBottom:"1px solid var(--bdr)"}}>
+    <div style={{padding:"12px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:16,flexWrap:"wrap",maxWidth:1600,margin:"0 auto"}}>
+      <div style={{display:"flex",alignItems:"center",gap:16,flex:"1 1 auto",minWidth:0}}>
+        <div>
+          <div style={{fontSize:18,fontWeight:800,display:"flex",alignItems:"center",gap:8}}><span style={{color:"var(--acc)"}}>⚡</span> TaskCommand</div>
+          <div style={{fontSize:11,color:"var(--mut)",display:"flex",gap:10,flexWrap:"wrap",marginTop:2}}>
+            <span className="tabnum">{tasks.length} tasks</span>
+            {overdueCount>0 && <span style={{color:"var(--red)"}} className="tabnum">⚠ {overdueCount} overdue</span>}
+            {todayCount>0 && <span style={{color:"var(--amb)"}} className="tabnum">{todayCount} today</span>}
+            {weekCount>0 && <span className="tabnum">{weekCount} this week</span>}
+            <SyncBadge status={sync} />
           </div>
-          <button style={{...btnSm(C.mut),fontSize:18}} onClick={()=>{setDetailT(null);setSubDetailId(null);}}>✕</button>
         </div>
-
-        {/* Meta */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 16px",padding:14,background:C.sf2,borderRadius:8,marginBottom:16,fontSize:13}}>
-          <div><span style={{color:C.mut,fontSize:11}}>Assignee</span><div>👤 {t.assignee||"Unassigned"}</div></div>
-          <div><span style={{color:C.mut,fontSize:11}}>Project</span><div>{t.project||"—"}</div></div>
-          <div><span style={{color:C.mut,fontSize:11}}>Start</span><div>{t.startDate||"—"}</div></div>
-          <div><span style={{color:C.mut,fontSize:11}}>Due</span><div style={{color:t.due&&t.due<td()&&t.section!=="done"?C.red:C.txt}}>{t.due||"—"}</div></div>
-          <div><span style={{color:C.mut,fontSize:11}}>Est. Hours</span><div>{t.estimatedHours||"—"}</div></div>
-          <div><span style={{color:C.mut,fontSize:11}}>Created</span><div>{t.created}</div></div>
-          {t.completed&&<div><span style={{color:C.mut,fontSize:11}}>Completed</span><div style={{color:C.grn}}>{t.completed}</div></div>}
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+        <div style={{position:"relative"}}>
+          <input ref={searchRef} type="search" placeholder="Search…  /" value={flt.search} onChange={e=>setFF("search", e.target.value)}
+            style={{...iSt,width:200,padding:"8px 12px",fontSize:12.5}} />
         </div>
+        <button onClick={onCommand} title="Command palette (⌘K)" style={{...btn("var(--mut)","139,143,163"),padding:"8px 12px",fontSize:12}}><kbd style={{background:"transparent",border:"none",padding:0}}>⌘K</kbd></button>
+        <button onClick={onNewTask} style={btn()}>+ Task</button>
+        <button onClick={()=>setTheme(theme==="dark"?"light":"dark")} title="Toggle theme" style={{...btn("var(--mut)","139,143,163"),padding:"8px 12px"}}>{theme==="dark"?"☀":"🌙"}</button>
+        <button onClick={onSettings} title="Settings" style={{...btn("var(--mut)","139,143,163"),padding:"8px 12px"}}>⚙</button>
+        <div title={user.displayName||user.email} style={{width:32,height:32,borderRadius:"50%",background:"var(--acc)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:12,cursor:"pointer",backgroundImage:user.photoURL?`url(${user.photoURL})`:"none",backgroundSize:"cover"}} onClick={onSettings}>
+          {!user.photoURL && (user.displayName||user.email||"U").slice(0,1).toUpperCase()}
+        </div>
+      </div>
+    </div>
+    <nav style={{padding:"0 20px",display:"flex",gap:2,borderTop:"1px solid var(--bdr)",overflowX:"auto",maxWidth:1600,margin:"0 auto"}}>
+      {tabs.map(t => <button key={t.id} onClick={()=>setView(t.id)}
+        style={{padding:"10px 14px",fontSize:13,fontWeight:600,color:view===t.id?"var(--acc)":"var(--mut)",
+          borderBottom:`2px solid ${view===t.id?"var(--acc)":"transparent"}`,whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:6}}>
+        <span>{t.i}</span> {t.l}
+      </button>)}
+    </nav>
+  </header>;
+}
 
-        {/* Quick actions */}
+/* ═══════════════════════════════════════════════════════════════════
+   FILTER BAR
+   ═══════════════════════════════════════════════════════════════════ */
+function FilterBar() {
+  const {flt, setFF, aFlts, resetFilters, dNames, people, projects, sortBy, setSortBy} = useApp();
+  return <div className="no-print" style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center",padding:"10px 0",marginBottom:6}}>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.section} onChange={e=>setFF("section",e.target.value)}>
+      <option value="all">All Sections</option>{SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.dueGroup} onChange={e=>setFF("dueGroup",e.target.value)}>
+      <option value="all">Any Due</option>
+      <option value="overdue">⚠ Overdue</option>
+      <option value="today">Today</option>
+      <option value="week">This Week</option>
+      <option value="month">This Month</option>
+      <option value="later">Later</option>
+      <option value="none">No Date</option>
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.domain} onChange={e=>setFF("domain",e.target.value)}>
+      <option value="all">All Domains</option>{dNames.map(d=><option key={d}>{d}</option>)}
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.assignee} onChange={e=>setFF("assignee",e.target.value)}>
+      <option value="all">All Assignees</option>{people.map(p=><option key={p}>{p}</option>)}
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.priority} onChange={e=>setFF("priority",e.target.value)}>
+      <option value="all">Any Priority</option>{PRIORITIES.map(p=><option key={p}>{p}</option>)}
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.status} onChange={e=>setFF("status",e.target.value)}>
+      <option value="all">Any Status</option>{STATUSES.map(s=><option key={s}>{s}</option>)}
+    </select>
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={flt.project} onChange={e=>setFF("project",e.target.value)}>
+      <option value="all">All Projects</option>{projects.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}
+    </select>
+    <div style={{width:1,height:20,background:"var(--bdr)",margin:"0 4px"}} />
+    <select style={{...sel,width:"auto",padding:"7px 10px",fontSize:12}} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+      <option value="priority">Sort: Priority</option>
+      <option value="due">Sort: Due date</option>
+      <option value="updated">Sort: Recently updated</option>
+      <option value="created">Sort: Newest first</option>
+      <option value="title">Sort: Title A→Z</option>
+    </select>
+    {aFlts > 0 && <button onClick={resetFilters} style={{...btnSm("var(--red)"), border:"1px solid rgba(239,100,97,0.3)",padding:"6px 10px",background:"rgba(239,100,97,0.08)"}}>Clear ({aFlts})</button>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SAVED VIEWS + BULK BAR
+   ═══════════════════════════════════════════════════════════════════ */
+function SavedViewBar({apply, save, del}) {
+  const {savedViews} = useApp();
+  const [showAdd, setShowAdd] = useState(false);
+  const [n, setN] = useState("");
+  return <div className="no-print" style={{display:"flex",gap:6,alignItems:"center",marginBottom:14,flexWrap:"wrap",fontSize:12}}>
+    <span style={{color:"var(--mut)",fontWeight:600,fontSize:11,textTransform:"uppercase",letterSpacing:0.5,marginRight:4}}>Views:</span>
+    {savedViews.map(v => <span key={v.id} className="chip-hover" onClick={()=>apply(v)}
+      style={{padding:"5px 10px",borderRadius:6,border:"1px solid var(--bdr)",background:"var(--sf2)",color:"var(--txt2)",display:"inline-flex",alignItems:"center",gap:6}}>
+      {v.name}
+      {!v.id.startsWith("v-") && <span onClick={e=>{e.stopPropagation();del(v.id);}} style={{color:"var(--mut)",fontSize:14,cursor:"pointer"}}>×</span>}
+    </span>)}
+    {!showAdd ? <button onClick={()=>setShowAdd(true)} style={btnSm("var(--mut)")}>+ Save current</button>
+      : <span style={{display:"inline-flex",gap:4}}>
+        <input autoFocus value={n} onChange={e=>setN(e.target.value)} placeholder="View name…"
+          onKeyDown={e=>{if(e.key==="Enter"&&n.trim()){save(n.trim());setN("");setShowAdd(false);}if(e.key==="Escape"){setShowAdd(false);setN("");}}}
+          style={{...iSt,width:140,padding:"5px 8px",fontSize:12}} />
+        <button onClick={()=>{if(n.trim()){save(n.trim());setN("");setShowAdd(false);}}} style={btnSm("var(--acc)")}>Save</button>
+        <button onClick={()=>{setShowAdd(false);setN("");}} style={btnSm("var(--mut)")}>×</button>
+      </span>}
+  </div>;
+}
+
+function BulkActionBar({count, onMove, onDelete, onClear}) {
+  return <div className="no-print slide-in" style={{position:"sticky",top:120,zIndex:50,background:"var(--acc)",color:"#fff",padding:"10px 16px",borderRadius:8,marginBottom:14,display:"flex",gap:8,alignItems:"center",boxShadow:"var(--shadow-md)"}}>
+    <span style={{fontWeight:700,fontSize:13}}>{count} selected</span>
+    <div style={{flex:1}} />
+    <select onChange={e=>{if(e.target.value)onMove(e.target.value);e.target.value="";}} defaultValue="" style={{background:"rgba(255,255,255,0.15)",color:"#fff",border:"1px solid rgba(255,255,255,0.3)",borderRadius:4,padding:"5px 10px",fontSize:12}}>
+      <option value="">Move to…</option>
+      {SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}
+    </select>
+    <button onClick={onDelete} style={{background:"rgba(255,255,255,0.15)",color:"#fff",padding:"6px 12px",borderRadius:4,fontSize:12,fontWeight:600}}>Delete</button>
+    <button onClick={onClear} style={{color:"#fff",fontSize:18,padding:2}}>×</button>
+  </div>;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   TASK CARD (used across views)
+   ═══════════════════════════════════════════════════════════════════ */
+function TaskCard({task:t, compact}) {
+  const {gDC, subProg, setDetailT, setEditT, setShowTF, dTask, mvTask, onDS, selected, setSelected} = useApp();
+  const sec = SECTION_META[t.section], pri = PRI_M[t.priority||"Medium"], dom = gDC(t.domain), st = STATUS_C[t.taskStatus||"Not Started"];
+  const ov = isOverdue(t), sp = subProg(t);
+  const subCnt = (t.subtasks||[]).length, cCnt = (t.comments||[]).length, fCnt = (t.files||[]).length;
+  const isSelected = selected.has(t.id);
+  const toggleSelect = (e) => {
+    e.stopPropagation();
+    const s = new Set(selected);
+    if (s.has(t.id)) s.delete(t.id); else s.add(t.id);
+    setSelected(s);
+  };
+  return <div className="card" draggable onDragStart={e=>onDS(e,t.id)} onClick={()=>setDetailT(t)}
+    style={{background:isSelected?"rgba(124,109,240,0.16)":"var(--sf2)",borderRadius:8,padding:compact?"10px 12px":"12px 14px",
+      marginBottom:8,borderLeft:`3px solid ${sec.color}`,cursor:"pointer",
+      opacity:t.section==="done"?0.6:1,border:isSelected?"1px solid var(--acc)":"1px solid transparent"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+      <div style={{display:"flex",alignItems:"flex-start",gap:8,flex:1,minWidth:0}}>
+        <input type="checkbox" checked={isSelected} onChange={toggleSelect} onClick={e=>e.stopPropagation()}
+          title="Select for bulk actions" style={{accentColor:"var(--acc)",marginTop:3,flexShrink:0,cursor:"pointer"}} />
+        <div style={{minWidth:0,flex:1}}>
+          <div style={{fontWeight:600,fontSize:13.5,textDecoration:t.section==="done"?"line-through":"none",wordBreak:"break-word"}}>{t.title}</div>
+          {t.assignee && t.assignee!=="Unassigned" && !compact && <div style={{fontSize:11,color:"var(--mut)",marginTop:2}}>👤 {t.assignee}</div>}
+        </div>
+      </div>
+      <div style={{display:"flex",gap:2,flexShrink:0}}>
+        <button className="btn-hover" onClick={e=>{e.stopPropagation();mvTask(t.id, t.section==="done"?"active":"done");}}
+          title={t.section==="done"?"Reopen":"Mark done"} style={btnSm(t.section==="done"?"var(--mut)":"var(--grn)")}>{t.section==="done"?"↺":"✓"}</button>
+        <button className="btn-hover" onClick={e=>{e.stopPropagation();setEditT(t);setShowTF(true);}} style={btnSm("var(--mut)")}>✎</button>
+        <button className="btn-hover" onClick={e=>{e.stopPropagation();dTask(t.id);}} style={btnSm("var(--red)")}>✕</button>
+      </div>
+    </div>
+    <div style={{display:"flex",flexWrap:"wrap",gap:4,marginTop:8,marginLeft:26}}>
+      <span style={pill(dom.c, dom.raw)}>{t.domain}</span>
+      <span style={pill(pri.color, pri.bgRaw)}>{pri.icon} {t.priority}</span>
+      {!compact && <span style={pill(st.color, st.bgRaw)}>{t.taskStatus||"Not Started"}</span>}
+      {t.recurrence && t.recurrence!=="none" && <span style={pill("var(--tel)","56,190,201")}>↻</span>}
+      {ov && <span style={pill("var(--red)","239,100,97", 0.18)}>⚠ Overdue</span>}
+      {t.due && !ov && <span style={{fontSize:10.5,color:"var(--mut)"}}>📅 {fDateShort(t.due)}</span>}
+      {t.project && <span style={{fontSize:10.5,color:"var(--mut)"}}>◆ {t.project}</span>}
+    </div>
+    {sp && !compact && <PBar done={sp.done} total={sp.total} />}
+    {(subCnt>0||cCnt>0||fCnt>0) && !compact && <div style={{display:"flex",gap:12,marginTop:8,marginLeft:26,fontSize:11,color:"var(--mut)"}}>
+      {subCnt>0 && <span>☑ {sp?sp.done:0}/{subCnt}</span>}
+      {cCnt>0 && <span>💬 {cCnt}</span>}
+      {fCnt>0 && <span>🔗 {fCnt}</span>}
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DASHBOARD VIEW
+   ═══════════════════════════════════════════════════════════════════ */
+function DashboardView() {
+  const {tasks, projects, people, domains, gDC, activity} = useApp();
+  const today = td();
+  const active = tasks.filter(t => t.section !== "done");
+  const done = tasks.filter(t => t.section === "done");
+  const overdue = tasks.filter(isOverdue);
+  const dueToday = tasks.filter(t => t.section !== "done" && t.due === today);
+  const dueThisWeek = tasks.filter(t => t.section !== "done" && ["today","week"].includes(dueBucket(t)));
+
+  const workload = useMemo(() => {
+    const map = {};
+    active.forEach(t => { const p = t.assignee || "Unassigned"; map[p] = (map[p]||0)+1; });
+    return Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  }, [active]);
+
+  const byDomain = useMemo(() => {
+    const map = {};
+    domains.forEach(d => { map[d.name] = {open:0, done:0, color:d.color}; });
+    tasks.forEach(t => {
+      if (!map[t.domain]) map[t.domain] = {open:0, done:0, color:"#8b8fa3"};
+      if (t.section === "done") map[t.domain].done++;
+      else map[t.domain].open++;
+    });
+    return Object.entries(map).filter(([k,v])=>v.open+v.done>0);
+  }, [tasks, domains]);
+
+  const aging = useMemo(() => {
+    const buckets = [
+      {label:"0-7 days",   min:0,  max:7,  color:"var(--grn)"},
+      {label:"8-14 days",  min:8,  max:14, color:"var(--amb)"},
+      {label:"15-30 days", min:15, max:30, color:"var(--org)"},
+      {label:"Over 30",    min:31, max:9999, color:"var(--red)"}
+    ];
+    return buckets.map(b => ({
+      ...b,
+      count: active.filter(t => {
+        const created = t.createdAt || t.created;
+        if (!created) return false;
+        const days = daysBetween(created.slice(0,10), today);
+        return days >= b.min && days <= b.max;
+      }).length
+    }));
+  }, [active, today]);
+
+  // Completion trend (14 days)
+  const trend = useMemo(() => {
+    const days = 14;
+    const arr = new Array(days).fill(0);
+    done.forEach(t => {
+      const c = t.completedAt || t.completed;
+      if (!c) return;
+      const diff = daysBetween(c.slice(0,10), today);
+      if (diff >= 0 && diff < days) arr[days-1-diff]++;
+    });
+    return arr;
+  }, [done, today]);
+
+  const upcoming = useMemo(() =>
+    active.filter(t => t.due).sort((a,b) => a.due.localeCompare(b.due)).slice(0, 8)
+  , [active]);
+
+  const hoursEst = active.reduce((s,t) => s + (parseFloat(t.estimatedHours)||0), 0);
+  const hoursAct = tasks.reduce((s,t) => s + (parseFloat(t.actualHours)||0), 0);
+
+  return <div className="fade-in">
+    <h2 style={{fontSize:14,fontWeight:700,color:"var(--mut)",textTransform:"uppercase",letterSpacing:0.6,marginBottom:12}}>Executive Snapshot</h2>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10,marginBottom:24}}>
+      <KpiTile label="Active" value={active.length} accent="var(--acc)" sub={`${done.length} completed`} />
+      <KpiTile label="Overdue" value={overdue.length} accent="var(--red)" sub={overdue.length ? "immediate attention" : "on track"} />
+      <KpiTile label="Due Today" value={dueToday.length} accent="var(--amb)" />
+      <KpiTile label="This Week" value={dueThisWeek.length} accent="var(--org)" />
+      <KpiTile label="Est. Hours" value={hoursEst.toFixed(1)} accent="var(--tel)" sub={`${hoursAct.toFixed(1)}h logged`} />
+      <KpiTile label="Projects" value={projects.length} accent="var(--gold)" sub={`${people.length} people`} />
+    </div>
+
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:16,marginBottom:24}}>
+      {/* Aging */}
+      <div style={cSt}>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <span>Aging — Open Tasks</span>
+          <span style={{fontSize:11,color:"var(--mut)",fontWeight:500}}>days since created</span>
+        </div>
+        {aging.map(b => {
+          const max = Math.max(...aging.map(x=>x.count), 1);
+          const pct = (b.count/max)*100;
+          return <div key={b.label} style={{marginBottom:10}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:4}}>
+              <span style={{color:"var(--txt2)"}}>{b.label}</span>
+              <span className="tabnum" style={{fontWeight:700,color:b.color}}>{b.count}</span>
+            </div>
+            <div style={{height:6,background:"var(--sf2)",borderRadius:3,overflow:"hidden"}}>
+              <div style={{height:"100%",width:pct+"%",background:b.color,borderRadius:3,transition:"width 0.4s"}} />
+            </div>
+          </div>;
+        })}
+      </div>
+
+      {/* Completion trend */}
+      <div style={cSt}>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <span>Completion Trend</span>
+          <span className="tabnum" style={{fontSize:11,color:"var(--mut)",fontWeight:500}}>14 days · {trend.reduce((a,b)=>a+b,0)} closed</span>
+        </div>
+        <Sparkline data={trend} color="var(--grn)" height={60} />
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--mut)",marginTop:4}}>
+          <span>14d ago</span><span>Today</span>
+        </div>
+      </div>
+
+      {/* Workload */}
+      <div style={cSt}>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>Workload by Assignee</div>
+        {workload.length === 0 ? <div style={{color:"var(--mut)",fontSize:12,fontStyle:"italic"}}>No active tasks</div>
+          : workload.slice(0,6).map(([person, count]) => {
+            const max = workload[0][1];
+            return <div key={person} style={{marginBottom:8}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3}}>
+                <span>{person}</span>
+                <span className="tabnum" style={{fontWeight:700}}>{count}</span>
+              </div>
+              <div style={{height:5,background:"var(--sf2)",borderRadius:3,overflow:"hidden"}}>
+                <div style={{height:"100%",width:(count/max*100)+"%",background:"var(--acc)",borderRadius:3,transition:"width 0.4s"}} />
+              </div>
+            </div>;
+          })}
+      </div>
+
+      {/* By Domain */}
+      <div style={cSt}>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>Open vs. Done by Domain</div>
+        {byDomain.slice(0,8).map(([name, {open,done,color}]) => {
+          const total = open+done, pct = total ? (done/total)*100 : 0;
+          return <div key={name} style={{marginBottom:9}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",fontSize:12,marginBottom:3}}>
+              <span style={{display:"flex",alignItems:"center",gap:6}}><span style={{width:8,height:8,borderRadius:2,background:color}} />{name}</span>
+              <span className="tabnum" style={{color:"var(--mut)"}}>{open} open · {done} done</span>
+            </div>
+            <div style={{height:5,background:"var(--sf2)",borderRadius:3,overflow:"hidden",display:"flex"}}>
+              <div style={{height:"100%",width:(open/total*100)+"%",background:color,opacity:0.6}} />
+              <div style={{height:"100%",width:(done/total*100)+"%",background:"var(--grn)",opacity:0.4}} />
+            </div>
+          </div>;
+        })}
+      </div>
+    </div>
+
+    {/* Upcoming */}
+    <div style={cSt}>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>Next 8 Deadlines</div>
+      {upcoming.length === 0 ? <div style={{color:"var(--mut)",fontSize:12,fontStyle:"italic"}}>No upcoming due dates</div>
+        : upcoming.map(t => <TaskCard key={t.id} task={t} compact />)}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOARD VIEW (Kanban)
+   ═══════════════════════════════════════════════════════════════════ */
+function BoardView() {
+  const {filtered, onDO, onDr} = useApp();
+  return <div className="fade-in" style={{display:"flex",gap:12,overflowX:"auto",paddingBottom:8}}>
+    {SECTIONS.map(sec => {
+      const m = SECTION_META[sec];
+      const items = filtered.filter(t => t.section === sec);
+      return <div key={sec} onDragOver={onDO} onDrop={e=>onDr(e,sec)}
+        style={{...cSt,flex:"1 1 260px",minWidth:260,minHeight:200}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,paddingBottom:8,borderBottom:`2px solid ${m.color}`}}>
+          <span style={{fontSize:14,color:m.color}}>{m.icon}</span>
+          <span style={{fontSize:12.5,fontWeight:700,textTransform:"uppercase",letterSpacing:0.5,color:"var(--txt2)"}}>{m.label}</span>
+          <span className="tabnum" style={{marginLeft:"auto",fontSize:13,fontWeight:700,color:m.color}}>{items.length}</span>
+        </div>
+        {items.length === 0 ? <div style={{textAlign:"center",padding:24,color:"var(--mut)",fontSize:12,fontStyle:"italic",border:"1px dashed var(--bdr)",borderRadius:8}}>Drop tasks here</div>
+          : items.map(t => <TaskCard key={t.id} task={t} />)}
+      </div>;
+    })}
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIST VIEW
+   ═══════════════════════════════════════════════════════════════════ */
+function ListView() {
+  const {filtered, gDC, subProg, setDetailT, setEditT, setShowTF, dTask, mvTask, selected, setSelected} = useApp();
+  const allSelected = filtered.length > 0 && filtered.every(t => selected.has(t.id));
+  const toggleAll = () => {
+    const s = new Set(selected);
+    if (allSelected) filtered.forEach(t => s.delete(t.id));
+    else filtered.forEach(t => s.add(t.id));
+    setSelected(s);
+  };
+  return <div className="fade-in" style={cSt}>
+    {filtered.length === 0 ? <div style={{textAlign:"center",padding:40,color:"var(--mut)",fontSize:13}}>
+      <div style={{fontSize:32,marginBottom:8,opacity:0.5}}>◯</div>
+      No tasks match your filters.
+    </div> : <div style={{overflowX:"auto"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:12.5,minWidth:900}}>
+        <thead>
+          <tr style={{borderBottom:"2px solid var(--bdr)"}}>
+            <th style={{padding:"10px 8px",textAlign:"left",fontWeight:700,color:"var(--mut)",fontSize:10.5,textTransform:"uppercase",letterSpacing:0.5,width:32}}>
+              <input type="checkbox" checked={allSelected} onChange={toggleAll} style={{accentColor:"var(--acc)"}} />
+            </th>
+            {["Title","Section","Status","Priority","Domain","Assignee","Due","Progress",""].map(h =>
+              <th key={h} style={{padding:"10px 8px",textAlign:"left",fontWeight:700,color:"var(--mut)",fontSize:10.5,textTransform:"uppercase",letterSpacing:0.5}}>{h}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {filtered.map(t => {
+            const sec = SECTION_META[t.section], pri = PRI_M[t.priority||"Medium"], dom = gDC(t.domain), st = STATUS_C[t.taskStatus||"Not Started"];
+            const sp = subProg(t), ov = isOverdue(t), isSel = selected.has(t.id);
+            return <tr key={t.id} className="row-hover" style={{borderBottom:"1px solid var(--bdr)",cursor:"pointer",background:isSel?"rgba(124,109,240,0.08)":"transparent"}} onClick={()=>setDetailT(t)}>
+              <td style={{padding:"8px",width:32}} onClick={e=>e.stopPropagation()}>
+                <input type="checkbox" checked={isSel} onChange={()=>{const s=new Set(selected); s.has(t.id)?s.delete(t.id):s.add(t.id); setSelected(s);}} style={{accentColor:"var(--acc)"}} />
+              </td>
+              <td style={{padding:"10px 8px",fontWeight:600,maxWidth:280}}>
+                <div style={{textDecoration:t.section==="done"?"line-through":"none",opacity:t.section==="done"?0.6:1,wordBreak:"break-word"}}>{t.title}</div>
+                {t.project && <div style={{fontSize:10.5,color:"var(--mut)",marginTop:2}}>◆ {t.project}</div>}
+              </td>
+              <td style={{padding:"10px 8px"}}><span style={pill(sec.color, sec.raw)}>{sec.label}</span></td>
+              <td style={{padding:"10px 8px"}}><span style={pill(st.color, st.bgRaw)}>{t.taskStatus||"Not Started"}</span></td>
+              <td style={{padding:"10px 8px"}}><span style={pill(pri.color, pri.bgRaw)}>{pri.icon} {t.priority}</span></td>
+              <td style={{padding:"10px 8px"}}><span style={pill(dom.c, dom.raw)}>{t.domain}</span></td>
+              <td style={{padding:"10px 8px",fontSize:12,color:"var(--txt2)"}}>{t.assignee||"—"}</td>
+              <td style={{padding:"10px 8px",fontSize:12,color:ov?"var(--red)":"var(--txt2)",fontWeight:ov?700:400}}>{ov && "⚠ "}{fDateShort(t.due)}</td>
+              <td style={{padding:"10px 8px",fontSize:12,color:"var(--mut)",minWidth:80}}>{sp ? `${sp.done}/${sp.total}` : "—"}</td>
+              <td style={{padding:"10px 8px"}} onClick={e=>e.stopPropagation()}>
+                <div style={{display:"flex",gap:2}}>
+                  <button onClick={()=>mvTask(t.id, t.section==="done"?"active":"done")} style={btnSm(t.section==="done"?"var(--mut)":"var(--grn)")}>{t.section==="done"?"↺":"✓"}</button>
+                  <button onClick={()=>{setEditT(t);setShowTF(true);}} style={btnSm("var(--mut)")}>✎</button>
+                  <button onClick={()=>dTask(t.id)} style={btnSm("var(--red)")}>✕</button>
+                </div>
+              </td>
+            </tr>;
+          })}
+        </tbody>
+      </table>
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CALENDAR VIEW
+   ═══════════════════════════════════════════════════════════════════ */
+function CalendarView() {
+  const {tasks, gDC, setDetailT} = useApp();
+  const today = new Date();
+  const [cursor, setCursor] = useState({y:today.getFullYear(), m:today.getMonth()});
+  const first = new Date(cursor.y, cursor.m, 1);
+  const startDow = (first.getDay()+6)%7; // Mon=0
+  const daysInMonth = new Date(cursor.y, cursor.m+1, 0).getDate();
+  const cells = [];
+  for (let i=0;i<startDow;i++) cells.push(null);
+  for (let d=1;d<=daysInMonth;d++) cells.push(new Date(cursor.y, cursor.m, d).toISOString().split("T")[0]);
+  while (cells.length % 7 !== 0) cells.push(null);
+  const monthName = first.toLocaleDateString("en-GB", {month:"long", year:"numeric"});
+  const prev = () => { const d = new Date(cursor.y, cursor.m-1, 1); setCursor({y:d.getFullYear(), m:d.getMonth()}); };
+  const next = () => { const d = new Date(cursor.y, cursor.m+1, 1); setCursor({y:d.getFullYear(), m:d.getMonth()}); };
+  const todayStr = td();
+
+  return <div className="fade-in" style={cSt}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+      <h2 style={{fontSize:16,fontWeight:700}}>{monthName}</h2>
+      <div style={{display:"flex",gap:6}}>
+        <button onClick={prev} style={btn("var(--mut)","139,143,163")}>‹</button>
+        <button onClick={()=>setCursor({y:today.getFullYear(),m:today.getMonth()})} style={btn("var(--mut)","139,143,163")}>Today</button>
+        <button onClick={next} style={btn("var(--mut)","139,143,163")}>›</button>
+      </div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:2,marginBottom:8}}>
+      {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d =>
+        <div key={d} style={{fontSize:11,fontWeight:700,color:"var(--mut)",textAlign:"center",padding:8,textTransform:"uppercase",letterSpacing:0.5}}>{d}</div>)}
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+      {cells.map((day, i) => {
+        if (!day) return <div key={i} />;
+        const dayTasks = tasks.filter(t => t.due === day && t.section !== "done");
+        const isToday = day === todayStr;
+        const isWeekend = [5,6].includes(i%7);
+        return <div key={day} style={{minHeight:96,border:"1px solid var(--bdr)",borderRadius:6,padding:6,background:isToday?"rgba(124,109,240,0.08)":isWeekend?"var(--sf2)":"var(--sf)",display:"flex",flexDirection:"column",gap:4,overflow:"hidden"}}>
+          <div style={{fontSize:11,fontWeight:isToday?800:600,color:isToday?"var(--acc)":"var(--txt2)"}}>{day.slice(-2)}</div>
+          {dayTasks.slice(0,3).map(t => {
+            const dom = gDC(t.domain);
+            const ov = isOverdue(t);
+            return <div key={t.id} onClick={()=>setDetailT(t)} title={t.title}
+              style={{fontSize:10.5,padding:"3px 6px",borderRadius:4,cursor:"pointer",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:ov?"var(--red)":dom.c,background:hexBg(dom.c,0.15),fontWeight:600}}>
+              {ov && "⚠ "}{t.title}
+            </div>;
+          })}
+          {dayTasks.length > 3 && <div style={{fontSize:10,color:"var(--mut)",marginTop:2}}>+{dayTasks.length-3} more</div>}
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROJECTS VIEW
+   ═══════════════════════════════════════════════════════════════════ */
+function ProjectsView({onNew, onEdit, onDelete}) {
+  const {tasks, projects, gDC, setFF, setFlt, flt} = useApp();
+  return <div className="fade-in" style={cSt}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+      <div>
+        <h2 style={{fontSize:15,fontWeight:700}}>Projects</h2>
+        <div style={{fontSize:11.5,color:"var(--mut)"}}>{projects.length} project{projects.length!==1&&"s"}</div>
+      </div>
+      <button onClick={onNew} style={btn("var(--gold)","212,168,67")}>+ Project</button>
+    </div>
+    <div style={{overflowX:"auto"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:13,minWidth:640}}>
+        <thead>
+          <tr style={{borderBottom:"2px solid var(--bdr)"}}>
+            {["Project","Domain","Status","Open Tasks","Completed",""].map(h => <th key={h} style={{textAlign:"left",padding:"10px 8px",fontWeight:700,color:"var(--mut)",fontSize:10.5,textTransform:"uppercase",letterSpacing:0.5}}>{h}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map(p => {
+            const d = gDC(p.domain);
+            const projectTasks = tasks.filter(t => t.project === p.name);
+            const open = projectTasks.filter(t => t.section !== "done").length;
+            const done = projectTasks.filter(t => t.section === "done").length;
+            return <tr key={p.id} className="row-hover" style={{borderBottom:"1px solid var(--bdr)"}}>
+              <td style={{padding:"12px 8px",fontWeight:700}}>
+                <span className="link-hover" onClick={()=>setFlt({...flt,project:p.name})} style={{cursor:"pointer"}}>{p.name}</span>
+              </td>
+              <td style={{padding:"12px 8px"}}><span style={pill(d.c, d.raw)}>{p.domain}</span></td>
+              <td style={{padding:"12px 8px",color:"var(--txt2)"}}>{p.status}</td>
+              <td style={{padding:"12px 8px",fontWeight:700}} className="tabnum">{open}</td>
+              <td style={{padding:"12px 8px",color:"var(--mut)"}} className="tabnum">{done}</td>
+              <td style={{padding:"12px 8px"}}>
+                <button onClick={()=>onEdit(p)} style={btnSm("var(--mut)")}>✎</button>
+                <button onClick={()=>onDelete(p.id)} style={btnSm("var(--red)")}>✕</button>
+              </td>
+            </tr>;
+          })}
+        </tbody>
+      </table>
+      {projects.length === 0 && <div style={{textAlign:"center",padding:40,color:"var(--mut)"}}>No projects yet. Click <strong>+ Project</strong> to add one.</div>}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REPORTS VIEW (printable + exports)
+   ═══════════════════════════════════════════════════════════════════ */
+function ReportsView({activity, exportCsv, exportBackup}) {
+  const {tasks, projects, people, filtered, user} = useApp();
+  const today = td();
+  const overdue = filtered.filter(isOverdue);
+  const dueThisWeek = filtered.filter(t => t.section !== "done" && ["today","week"].includes(dueBucket(t)));
+  const activeByPriority = PRIORITIES.map(p => ({p, count:filtered.filter(t => t.section !== "done" && t.priority === p).length}));
+  const groups = filtered.reduce((acc, t) => { (acc[t.domain||"—"] = acc[t.domain||"—"] || []).push(t); return acc; }, {});
+  const recentActivity = (activity || []).slice(-30).reverse();
+
+  return <div className="fade-in">
+    <div className="no-print" style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
+      <button onClick={()=>window.print()} style={btn()}>🖨 Print / Save as PDF</button>
+      <button onClick={exportCsv} style={btn("var(--gold)","212,168,67")}>⬇ CSV Export</button>
+      <button onClick={exportBackup} style={btn("var(--mut)","139,143,163")}>⬇ JSON Backup</button>
+    </div>
+
+    <div style={{...cSt,marginBottom:16,padding:24}}>
+      <div style={{textAlign:"center",marginBottom:20,paddingBottom:16,borderBottom:"2px solid var(--bdr)"}}>
+        <h1 style={{fontSize:22,fontWeight:800,marginBottom:4}}>Task & Workflow Status Report</h1>
+        <div style={{fontSize:13,color:"var(--mut)"}}>Prepared by {user.displayName||user.email} · {fDate(today)}</div>
+      </div>
+
+      <h2 style={{fontSize:14,fontWeight:700,marginBottom:10,color:"var(--txt2)"}}>Executive Summary</h2>
+      <p style={{fontSize:13,lineHeight:1.7,marginBottom:16}}>
+        The current workflow reflects <strong>{filtered.filter(t=>t.section!=="done").length} active tasks</strong> across <strong>{projects.length} projects</strong>.
+        {overdue.length > 0 && <> A total of <strong style={{color:"var(--red)"}}>{overdue.length} tasks are overdue</strong> requiring immediate remediation.</>}
+        {dueThisWeek.length > 0 && <> A further <strong>{dueThisWeek.length} tasks</strong> are due within the current week.</>}
+      </p>
+
+      <h2 style={{fontSize:14,fontWeight:700,marginBottom:10,color:"var(--txt2)"}}>Priority Distribution — Open Tasks</h2>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:13,marginBottom:20}}>
+        <thead><tr style={{borderBottom:"1px solid var(--bdr)"}}>
+          <th style={{textAlign:"left",padding:8,fontWeight:700,color:"var(--mut)",fontSize:11}}>Priority</th>
+          <th style={{textAlign:"right",padding:8,fontWeight:700,color:"var(--mut)",fontSize:11}}>Count</th>
+          <th style={{textAlign:"right",padding:8,fontWeight:700,color:"var(--mut)",fontSize:11}}>Share</th>
+        </tr></thead>
+        <tbody>{activeByPriority.map(({p,count})=>{
+          const total = activeByPriority.reduce((a,b)=>a+b.count,0);
+          return <tr key={p} style={{borderBottom:"1px solid var(--bdr)"}}>
+            <td style={{padding:8}}>{PRI_M[p].icon} {p}</td>
+            <td style={{padding:8,textAlign:"right",fontWeight:700}} className="tabnum">{count}</td>
+            <td style={{padding:8,textAlign:"right",color:"var(--mut)"}} className="tabnum">{total?((count/total)*100).toFixed(1):"0.0"}%</td>
+          </tr>;
+        })}</tbody>
+      </table>
+
+      <h2 style={{fontSize:14,fontWeight:700,marginBottom:10,color:"var(--txt2)"}}>Detail — Grouped by Domain</h2>
+      {Object.entries(groups).map(([domain, list]) => <div key={domain} style={{marginBottom:16}}>
+        <h3 style={{fontSize:13,fontWeight:700,marginBottom:8,padding:"6px 10px",background:"var(--sf2)",borderRadius:4}}>{domain} <span style={{color:"var(--mut)",fontWeight:400}}>({list.length})</span></h3>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+          <thead><tr style={{borderBottom:"1px solid var(--bdr)"}}>
+            <th style={{textAlign:"left",padding:6,fontWeight:700,color:"var(--mut)",fontSize:10.5}}>Task</th>
+            <th style={{textAlign:"left",padding:6,fontWeight:700,color:"var(--mut)",fontSize:10.5}}>Priority</th>
+            <th style={{textAlign:"left",padding:6,fontWeight:700,color:"var(--mut)",fontSize:10.5}}>Status</th>
+            <th style={{textAlign:"left",padding:6,fontWeight:700,color:"var(--mut)",fontSize:10.5}}>Assignee</th>
+            <th style={{textAlign:"left",padding:6,fontWeight:700,color:"var(--mut)",fontSize:10.5}}>Due</th>
+          </tr></thead>
+          <tbody>{list.map(t => <tr key={t.id} style={{borderBottom:"1px solid var(--bdr)"}}>
+            <td style={{padding:6}}>{isOverdue(t) && "⚠ "}{t.title}</td>
+            <td style={{padding:6}}>{t.priority}</td>
+            <td style={{padding:6}}>{t.taskStatus||"Not Started"}</td>
+            <td style={{padding:6}}>{t.assignee||"—"}</td>
+            <td style={{padding:6,color:isOverdue(t)?"var(--red)":"var(--txt2)"}}>{fDateShort(t.due)}</td>
+          </tr>)}</tbody>
+        </table>
+      </div>)}
+
+      <h2 className="no-print" style={{fontSize:14,fontWeight:700,marginBottom:10,color:"var(--txt2)",marginTop:20}}>Recent Activity (Audit Trail)</h2>
+      <div className="no-print" style={{maxHeight:280,overflow:"auto",background:"var(--sf2)",borderRadius:6,padding:12}}>
+        {recentActivity.length === 0 ? <div style={{color:"var(--mut)",fontSize:12,fontStyle:"italic"}}>No activity yet</div>
+          : recentActivity.map(a => <div key={a.id} style={{padding:"6px 4px",borderBottom:"1px solid var(--bdr)",fontSize:12,display:"flex",gap:8}}>
+            <span style={{color:"var(--mut)",fontSize:11,width:100,flexShrink:0}} className="tabnum">{fDateTime(a.time)}</span>
+            <span style={{color:"var(--acc)",fontSize:11,width:80,flexShrink:0,fontWeight:600}}>{a.type}</span>
+            <span style={{color:"var(--txt2)"}}>{a.detail}</span>
+          </div>)}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TASK FORM MODAL
+   ═══════════════════════════════════════════════════════════════════ */
+function TaskFormModal({open, onClose, initial, onSave}) {
+  const {dNames, people, projects} = useApp();
+  const isE = !!initial?.id;
+  const [f, sF] = useState(null);
+  useEffect(() => {
+    if (open) sF(initial || {title:"",notes:"",section:"active",priority:"Medium",domain:dNames[0]||"",taskStatus:"Not Started",assignee:people[0]||"",due:"",startDate:"",estimatedHours:"",actualHours:"",project:"",recurrence:"none"});
+  }, [open, initial]);
+  if (!f) return null;
+  const set = (k,v) => sF({...f, [k]:v});
+  const submit = () => { if (f.title.trim()) onSave(f); };
+  return <Modal open={open} onClose={onClose} title={isE?"Edit Task":"New Task"} width={560}
+    footer={<>
+      <button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Cancel</button>
+      <button onClick={submit} style={btn()}>{isE?"Update":"Add Task"}</button>
+    </>}>
+    <div style={{marginBottom:14}}><label style={lSt}>Title *</label>
+      <input style={iSt} value={f.title} onChange={e=>set("title",e.target.value)} placeholder="e.g. Reconcile GL clearing accounts" autoFocus
+        onKeyDown={e=>{if(e.key==="Enter"&&e.metaKey)submit();}} /></div>
+    <div style={{marginBottom:14}}><label style={lSt}>Description / Notes</label>
+      <textarea style={{...iSt,minHeight:80,resize:"vertical"}} value={f.notes||""} onChange={e=>set("notes",e.target.value)} placeholder="Detail, links, acceptance criteria…" /></div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+      <div><label style={lSt}>Section</label><select style={sel} value={f.section} onChange={e=>set("section",e.target.value)}>{SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}</select></div>
+      <div><label style={lSt}>Status</label><select style={sel} value={f.taskStatus||"Not Started"} onChange={e=>set("taskStatus",e.target.value)}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+      <div><label style={lSt}>Priority</label><select style={sel} value={f.priority} onChange={e=>set("priority",e.target.value)}>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select></div>
+      <div><label style={lSt}>Domain</label><select style={sel} value={f.domain} onChange={e=>set("domain",e.target.value)}>{dNames.map(d=><option key={d}>{d}</option>)}</select></div>
+      <div><label style={lSt}>Assignee</label><select style={sel} value={f.assignee} onChange={e=>set("assignee",e.target.value)}><option value="">Unassigned</option>{people.map(p=><option key={p}>{p}</option>)}</select></div>
+      <div><label style={lSt}>Project</label><select style={sel} value={f.project||""} onChange={e=>set("project",e.target.value)}><option value="">None</option>{projects.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}</select></div>
+      <div><label style={lSt}>Start Date</label><input style={iSt} type="date" value={f.startDate||""} onChange={e=>set("startDate",e.target.value)} /></div>
+      <div><label style={lSt}>Due Date</label><input style={iSt} type="date" value={f.due||""} onChange={e=>set("due",e.target.value)} /></div>
+      <div><label style={lSt}>Est. Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.estimatedHours||""} onChange={e=>set("estimatedHours",e.target.value)} /></div>
+      <div><label style={lSt}>Actual Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.actualHours||""} onChange={e=>set("actualHours",e.target.value)} /></div>
+      <div style={{gridColumn:"span 2"}}><label style={lSt}>Recurrence</label><select style={sel} value={f.recurrence||"none"} onChange={e=>set("recurrence",e.target.value)}>{RECURRENCE_PRESETS.map(r=><option key={r.v} value={r.v}>{r.l}</option>)}</select>
+        <div style={{fontSize:11,color:"var(--mut)",marginTop:4}}>When marked Done, a new instance auto-generates at the next occurrence.</div></div>
+    </div>
+  </Modal>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBTASK FORM MODAL
+   ═══════════════════════════════════════════════════════════════════ */
+function SubFormModal({open, onClose, parentId, initial, onAdd, onUpdate}) {
+  const {people} = useApp();
+  const isE = !!initial?.id;
+  const [f, sF] = useState(null);
+  useEffect(() => {
+    if (open) sF(initial || {title:"",notes:"",assignee:people[0]||"",priority:"Medium",taskStatus:"Not Started",due:"",estimatedHours:"",actualHours:""});
+  }, [open, initial, people]);
+  if (!f) return null;
+  const set = (k,v) => sF({...f, [k]:v});
+  const submit = () => { if (!f.title.trim()) return; if (isE) onUpdate(parentId, f.id, f); else onAdd(parentId, f); onClose(); };
+  return <Modal open={open} onClose={onClose} title={isE?"Edit Subtask":"New Subtask"} width={480}
+    footer={<>
+      <button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Cancel</button>
+      <button onClick={submit} style={btn()}>{isE?"Update":"Add Subtask"}</button>
+    </>}>
+    <div style={{marginBottom:12}}><label style={lSt}>Title *</label><input style={iSt} value={f.title} onChange={e=>set("title",e.target.value)} autoFocus /></div>
+    <div style={{marginBottom:12}}><label style={lSt}>Notes</label><textarea style={{...iSt,minHeight:60,resize:"vertical"}} value={f.notes||""} onChange={e=>set("notes",e.target.value)} /></div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+      <div><label style={lSt}>Assignee</label><select style={sel} value={f.assignee||""} onChange={e=>set("assignee",e.target.value)}><option value="">Unassigned</option>{people.map(p=><option key={p}>{p}</option>)}</select></div>
+      <div><label style={lSt}>Priority</label><select style={sel} value={f.priority||"Medium"} onChange={e=>set("priority",e.target.value)}>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select></div>
+      <div><label style={lSt}>Status</label><select style={sel} value={f.taskStatus||"Not Started"} onChange={e=>set("taskStatus",e.target.value)}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+      <div><label style={lSt}>Due</label><input style={iSt} type="date" value={f.due||""} onChange={e=>set("due",e.target.value)} /></div>
+      <div><label style={lSt}>Est. Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.estimatedHours||""} onChange={e=>set("estimatedHours",e.target.value)} /></div>
+      <div><label style={lSt}>Actual Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.actualHours||""} onChange={e=>set("actualHours",e.target.value)} /></div>
+    </div>
+  </Modal>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DETAIL PANEL (side drawer)
+   ═══════════════════════════════════════════════════════════════════ */
+function DetailPanel({open, onClose}) {
+  const {detailT, tasks, uTask, mvTask, gDC, subProg, people, addSub, updateSub, deleteSub, toggleSub, addComment, delComment, addLink, rmFile, setEditT, setShowTF, setEditSub, setShowSubForm, dTask, subDetailId, setSubDetailId, user} = useApp();
+  const t = detailT ? tasks.find(x => x.id === detailT.id) : null;
+  const [newComment, setNC] = useState("");
+  const [quickSub, setQS] = useState("");
+  const [linkUrl, setLU] = useState("");
+  const [linkName, setLN] = useState("");
+  useEffect(() => { if (!open) { setNC(""); setQS(""); setLU(""); setLN(""); } }, [open]);
+  if (!open || !t) return null;
+  const sec = SECTION_META[t.section], pri = PRI_M[t.priority||"Medium"], dom = gDC(t.domain), st = STATUS_C[t.taskStatus||"Not Started"];
+  const subs = t.subtasks||[], sp = subProg(t);
+  const hoursEst = parseFloat(t.estimatedHours)||0, hoursAct = parseFloat(t.actualHours)||0;
+  const variance = hoursAct - hoursEst;
+
+  return <div className="no-print" style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",justifyContent:"flex-end",zIndex:900}} onClick={onClose}>
+    <div className="slide-in" style={{background:"var(--sf)",borderLeft:"1px solid var(--bdr)",width:"100%",maxWidth:580,height:"100%",overflow:"auto",boxShadow:"var(--shadow-lg)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{padding:"20px 22px",borderBottom:"1px solid var(--bdr)",position:"sticky",top:0,background:"var(--sf)",zIndex:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+          <div style={{flex:1,minWidth:0}}>
+            <h2 style={{fontSize:18,fontWeight:700,wordBreak:"break-word",lineHeight:1.3}}>{t.title}</h2>
+            <div style={{display:"flex",flexWrap:"wrap",gap:5,marginTop:10}}>
+              <span style={pill(dom.c, dom.raw)}>{t.domain}</span>
+              <span style={pill(pri.color, pri.bgRaw)}>{pri.icon} {t.priority}</span>
+              <span style={pill(st.color, st.bgRaw)}>{t.taskStatus||"Not Started"}</span>
+              <span style={pill(sec.color, sec.raw)}>{sec.icon} {sec.label}</span>
+              {t.recurrence && t.recurrence!=="none" && <span style={pill("var(--tel)","56,190,201")}>↻ {RECURRENCE_PRESETS.find(r=>r.v===t.recurrence)?.l}</span>}
+            </div>
+          </div>
+          <button onClick={onClose} style={{color:"var(--mut)",fontSize:22,padding:4,marginLeft:8}}>×</button>
+        </div>
+      </div>
+
+      <div style={{padding:22}}>
         <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap"}}>
-          <select style={{...sel,width:"auto",fontSize:12,padding:"6px 10px"}} value={t.taskStatus||"Not Started"} onChange={e=>uTask(t.id,{taskStatus:e.target.value})}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select>
-          <select style={{...sel,width:"auto",fontSize:12,padding:"6px 10px"}} value={t.section} onChange={e=>mvTask(t.id,e.target.value)}>{SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}</select>
-          <button style={{...btn(C.mut,"rgba(139,143,163,0.12)"),padding:"6px 12px",fontSize:12}} onClick={()=>{setEditT(t);setShowTF(true);setDetailT(null);}}>✎ Edit</button>
-          <button style={{...btn(C.red,"rgba(239,100,97,0.12)"),padding:"6px 12px",fontSize:12}} onClick={()=>dTask(t.id)}>Delete</button>
+          <select style={{...sel,width:"auto",fontSize:12,padding:"6px 10px"}} value={t.taskStatus||"Not Started"} onChange={e=>uTask(t.id,{taskStatus:e.target.value},"status-change",`Status → ${e.target.value}`)}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select>
+          <select style={{...sel,width:"auto",fontSize:12,padding:"6px 10px"}} value={t.section} onChange={e=>mvTask(t.id, e.target.value)}>{SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}</select>
+          <button style={{...btn("var(--mut)","139,143,163"),padding:"6px 12px",fontSize:12}} onClick={()=>{setEditT(t);setShowTF(true);onClose();}}>✎ Edit</button>
+          <button style={{...btn("var(--red)","239,100,97"),padding:"6px 12px",fontSize:12}} onClick={()=>dTask(t.id)}>Delete</button>
         </div>
 
-        {/* Notes */}
-        {t.notes&&<div style={{marginBottom:16}}><div style={lSt}>Notes</div><div style={{fontSize:13,lineHeight:1.6,whiteSpace:"pre-wrap",background:C.sf2,padding:12,borderRadius:6}}>{t.notes}</div></div>}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px 16px",padding:16,background:"var(--sf2)",borderRadius:8,marginBottom:16,fontSize:13}}>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Assignee</span><div>👤 {t.assignee||"Unassigned"}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Project</span><div>{t.project||"—"}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Start</span><div>{fDate(t.startDate)}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Due</span><div style={{color:isOverdue(t)?"var(--red)":"var(--txt)",fontWeight:isOverdue(t)?700:400}}>{fDate(t.due)}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Est. Hours</span><div className="tabnum">{t.estimatedHours||"—"}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Actual Hours</span><div className="tabnum">{t.actualHours||"—"} {variance!==0 && <span style={{fontSize:11,color:variance>0?"var(--red)":"var(--grn)"}}>({variance>0?"+":""}{variance.toFixed(1)})</span>}</div></div>
+          <div><span style={{color:"var(--mut)",fontSize:11}}>Created</span><div>{fDate(t.createdAt?.slice(0,10)||t.created)}</div></div>
+          {t.completed && <div><span style={{color:"var(--mut)",fontSize:11}}>Completed</span><div style={{color:"var(--grn)"}}>{fDate(t.completed)}</div></div>}
+        </div>
 
-        {/* ═══ SUBTASKS (Full Management) ═══ */}
+        {t.notes && <div style={{marginBottom:16}}>
+          <div style={lSt}>Notes</div>
+          <div style={{fontSize:13,lineHeight:1.7,whiteSpace:"pre-wrap",background:"var(--sf2)",padding:12,borderRadius:6}}>{t.notes}</div>
+        </div>}
+
+        {/* Subtasks */}
         <div style={{marginBottom:16}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
             <span style={lSt}>Subtasks {sp?`(${sp.done}/${sp.total})`:""}</span>
             <button style={{...btn(),padding:"5px 12px",fontSize:12}} onClick={()=>{setEditSub(null);setShowSubForm(true);}}>+ Subtask</button>
           </div>
-          {sp&&<PBar done={sp.done} total={sp.total} />}
-
-          {/* Quick add */}
-          <div style={{display:"flex",gap:6,margin:"8px 0"}}>
-            <input style={{...iSt,flex:1}} placeholder="Quick add subtask..." value={quickSub} onChange={e=>setQS(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&quickSub.trim()){addSub(t.id,{title:quickSub.trim()});setQS("");}}} />
+          {sp && <PBar done={sp.done} total={sp.total} />}
+          <div style={{display:"flex",gap:6,margin:"10px 0"}}>
+            <input style={{...iSt,flex:1}} placeholder="Quick add subtask… ↵" value={quickSub} onChange={e=>setQS(e.target.value)}
+              onKeyDown={e=>{if(e.key==="Enter"&&quickSub.trim()){addSub(t.id,{title:quickSub.trim()});setQS("");}}} />
           </div>
-
-          {/* Subtask cards */}
-          {subs.map(sub=>{
-            const sPri=PRI_M[sub.priority||"Medium"];const sSt=STATUS_C[sub.taskStatus||"Not Started"];
-            const isDone=sub.taskStatus==="Done";const isOv=sub.due&&!isDone&&sub.due<td();
-            const isExpanded=subDetailId===sub.id;
-            return<div key={sub.id} style={{background:C.sf2,borderRadius:8,marginBottom:6,borderLeft:`3px solid ${sSt.color}`,overflow:"hidden"}}>
-              {/* Subtask header row */}
-              <div style={{padding:"10px 12px",cursor:"pointer",display:"flex",alignItems:"flex-start",gap:8}} onClick={()=>setSubDetailId(isExpanded?null:sub.id)}>
-                <input type="checkbox" checked={isDone} onChange={e=>{e.stopPropagation();toggleSub(t.id,sub.id);}} style={{accentColor:C.acc,marginTop:3,flexShrink:0,cursor:"pointer"}} />
+          {subs.map(sub => {
+            const sPri = PRI_M[sub.priority||"Medium"], sSt = STATUS_C[sub.taskStatus||"Not Started"];
+            const isDone = sub.taskStatus === "Done";
+            const isOv = sub.due && !isDone && sub.due < td();
+            const isExp = subDetailId === sub.id;
+            return <div key={sub.id} style={{background:"var(--sf2)",borderRadius:8,marginBottom:6,borderLeft:`3px solid ${sSt.color}`,overflow:"hidden"}}>
+              <div style={{padding:"10px 12px",display:"flex",alignItems:"flex-start",gap:8,cursor:"pointer"}} onClick={()=>setSubDetailId(isExp?null:sub.id)}>
+                <input type="checkbox" checked={isDone} onChange={e=>{e.stopPropagation();toggleSub(t.id,sub.id);}} style={{accentColor:"var(--acc)",marginTop:3,cursor:"pointer"}} />
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontWeight:600,fontSize:13,textDecoration:isDone?"line-through":"none",color:isDone?C.mut:C.txt,wordBreak:"break-word"}}>{sub.title}</div>
+                  <div style={{fontWeight:600,fontSize:13,textDecoration:isDone?"line-through":"none",color:isDone?"var(--mut)":"var(--txt)",wordBreak:"break-word"}}>{sub.title}</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:4,marginTop:4}}>
-                    <span style={pill(sPri.color,sPri.bg)}>{sPri.icon} {sub.priority||"Medium"}</span>
-                    <span style={pill(sSt.color,sSt.bg)}>{sub.taskStatus||"Not Started"}</span>
-                    {sub.assignee&&sub.assignee!=="Unassigned"&&<span style={{fontSize:10,color:C.mut}}>👤 {sub.assignee}</span>}
-                    {isOv&&<span style={pill(C.red,"rgba(239,100,97,0.15)")}>⚠ Overdue</span>}
-                    {sub.due&&!isOv&&<span style={{fontSize:10,color:C.mut}}>📅 {sub.due}</span>}
-                    {sub.estimatedHours&&<span style={{fontSize:10,color:C.mut}}>⏱ {sub.estimatedHours}h</span>}
+                    <span style={pill(sPri.color, sPri.bgRaw)}>{sPri.icon} {sub.priority||"Medium"}</span>
+                    <span style={pill(sSt.color, sSt.bgRaw)}>{sub.taskStatus||"Not Started"}</span>
+                    {sub.assignee && sub.assignee !== "Unassigned" && <span style={{fontSize:10.5,color:"var(--mut)"}}>👤 {sub.assignee}</span>}
+                    {isOv && <span style={pill("var(--red)","239,100,97",0.18)}>⚠ Overdue</span>}
+                    {sub.due && !isOv && <span style={{fontSize:10.5,color:"var(--mut)"}}>📅 {fDateShort(sub.due)}</span>}
+                    {sub.estimatedHours && <span style={{fontSize:10.5,color:"var(--mut)"}}>⏱ {sub.estimatedHours}h</span>}
                   </div>
                 </div>
                 <div style={{display:"flex",gap:2,flexShrink:0}}>
-                  <span style={btnSm(C.mut)} onClick={e=>{e.stopPropagation();setEditSub(sub);setShowSubForm(true);}}>✎</span>
-                  <span style={btnSm(C.red)} onClick={e=>{e.stopPropagation();deleteSub(t.id,sub.id);}}>✕</span>
-                  <span style={{...btnSm(C.mut),fontSize:14,transform:isExpanded?"rotate(180deg)":"rotate(0)",transition:"transform 0.2s"}}>▾</span>
+                  <button onClick={e=>{e.stopPropagation();setEditSub(sub);setShowSubForm(true);}} style={btnSm("var(--mut)")}>✎</button>
+                  <button onClick={e=>{e.stopPropagation();deleteSub(t.id,sub.id);}} style={btnSm("var(--red)")}>✕</button>
                 </div>
               </div>
-
-              {/* Expanded subtask detail */}
-              {isExpanded&&<div style={{padding:"0 12px 12px 38px",borderTop:`1px solid ${C.bdr}`}}>
-                {/* Quick status/priority/assignee inline */}
+              {isExp && <div style={{padding:"0 12px 12px 38px",borderTop:"1px solid var(--bdr)"}}>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:10,marginBottom:8}}>
                   <select style={{...sel,width:"auto",fontSize:11,padding:"4px 8px"}} value={sub.taskStatus||"Not Started"} onChange={e=>updateSub(t.id,sub.id,{taskStatus:e.target.value})}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select>
                   <select style={{...sel,width:"auto",fontSize:11,padding:"4px 8px"}} value={sub.priority||"Medium"} onChange={e=>updateSub(t.id,sub.id,{priority:e.target.value})}>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select>
                   <select style={{...sel,width:"auto",fontSize:11,padding:"4px 8px"}} value={sub.assignee||""} onChange={e=>updateSub(t.id,sub.id,{assignee:e.target.value})}><option value="">Unassigned</option>{people.map(p=><option key={p}>{p}</option>)}</select>
                 </div>
-                {/* Meta grid */}
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 12px",fontSize:12,marginBottom:8}}>
-                  <div><span style={{color:C.mut,fontSize:10}}>Due</span><div>{sub.due||"—"}</div></div>
-                  <div><span style={{color:C.mut,fontSize:10}}>Est. Hours</span><div>{sub.estimatedHours||"—"}</div></div>
-                  <div><span style={{color:C.mut,fontSize:10}}>Created</span><div>{sub.created||"—"}</div></div>
-                </div>
-                {/* Notes */}
-                {sub.notes&&<div style={{fontSize:12,color:C.txt,whiteSpace:"pre-wrap",background:C.bg,padding:10,borderRadius:6,marginBottom:8,lineHeight:1.5}}>{sub.notes}</div>}
-                {!sub.notes&&<div style={{fontSize:11,color:C.mut,fontStyle:"italic",marginBottom:8}}>No notes — click ✎ to add details</div>}
+                {sub.notes && <div style={{fontSize:12,whiteSpace:"pre-wrap",background:"var(--bg)",padding:10,borderRadius:6,marginBottom:8,lineHeight:1.5}}>{sub.notes}</div>}
               </div>}
             </div>;
           })}
-          {subs.length===0&&<div style={{textAlign:"center",padding:12,color:C.mut,fontSize:12,fontStyle:"italic"}}>No subtasks yet</div>}
+          {subs.length===0 && <div style={{textAlign:"center",padding:12,color:"var(--mut)",fontSize:12,fontStyle:"italic"}}>No subtasks yet</div>}
         </div>
 
-        {/* Files */}
+        {/* Links (replacing base64 file storage) */}
         <div style={{marginBottom:16}}>
-          <div style={lSt}>Attachments ({(t.files||[]).length})</div>
-          {(t.files||[]).map(f=><div key={f.name} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:C.sf2,borderRadius:6,marginBottom:4,fontSize:13}}>
-            <span style={{fontSize:16}}>{f.type?.startsWith("image")?"🖼":f.type?.includes("pdf")?"📕":"📄"}</span>
-            <div style={{flex:1,minWidth:0}}><div style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.name}</div><div style={{fontSize:11,color:C.mut}}>{fSize(f.size)} • {f.added}</div></div>
-            {f.data&&<a href={f.data} download={f.name} style={{...btnSm(C.acc),textDecoration:"none"}} onClick={e=>e.stopPropagation()}>⬇</a>}
-            <button style={btnSm(C.red)} onClick={()=>rmFile(t.id,f.name)}>✕</button>
+          <div style={lSt}>Links & References ({(t.files||[]).length})</div>
+          {(t.files||[]).map(f => <div key={f.id||f.name} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"var(--sf2)",borderRadius:6,marginBottom:4,fontSize:13}}>
+            <span style={{fontSize:14}}>🔗</span>
+            <div style={{flex:1,minWidth:0}}>
+              {f.url ? <a href={f.url} target="_blank" rel="noopener" style={{color:"var(--acc)",wordBreak:"break-all"}}>{f.name||f.url}</a>
+                : <><div>{f.name}</div><div style={{fontSize:10.5,color:"var(--amb)"}}>Legacy attachment — re-add as link</div></>}
+              {f.added && <div style={{fontSize:11,color:"var(--mut)"}}>{f.added}</div>}
+            </div>
+            <button style={btnSm("var(--red)")} onClick={()=>rmFile(t.id,f.id||f.name)}>✕</button>
           </div>)}
-          <input ref={fileRef} type="file" style={{display:"none"}} onChange={e=>{if(e.target.files[0])addFile(t.id,e.target.files[0]);e.target.value="";}} />
-          <button style={{...btn(C.mut,"rgba(139,143,163,0.12)"),marginTop:6,width:"100%",padding:8}} onClick={()=>fileRef.current?.click()}>📎 Add Attachment</button>
+          <div style={{display:"flex",gap:6,marginTop:6}}>
+            <input style={{...iSt,flex:2,fontSize:12}} placeholder="URL (Drive, SharePoint, etc.)" value={linkUrl} onChange={e=>setLU(e.target.value)} />
+            <input style={{...iSt,flex:1,fontSize:12}} placeholder="Label (optional)" value={linkName} onChange={e=>setLN(e.target.value)} />
+            <button style={btn("var(--mut)","139,143,163")} onClick={()=>{if(linkUrl.trim()){addLink(t.id, linkUrl.trim(), linkName.trim());setLU("");setLN("");}}}>Add</button>
+          </div>
+          <div style={{fontSize:10.5,color:"var(--mut)",marginTop:4,fontStyle:"italic"}}>Store files in Drive/SharePoint/S3 and paste the URL here. No file uploads to keep your workspace fast & secure.</div>
         </div>
 
         {/* Comments */}
         <div>
           <div style={lSt}>Comments ({(t.comments||[]).length})</div>
-          {(t.comments||[]).map(c=><div key={c.id} style={{padding:"10px 12px",background:C.sf2,borderRadius:6,marginBottom:6}}>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:C.mut,marginBottom:4}}><span style={{fontWeight:600,color:C.acc}}>{c.author}</span><div><span>{c.time}</span><button style={{...btnSm(C.red),fontSize:10,padding:"0 4px"}} onClick={()=>delComment(t.id,c.id)}>✕</button></div></div>
-            <div style={{fontSize:13,whiteSpace:"pre-wrap"}}>{c.text}</div>
+          {(t.comments||[]).map(c => <div key={c.id} style={{padding:"10px 12px",background:"var(--sf2)",borderRadius:6,marginBottom:6}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--mut)",marginBottom:4}}>
+              <span style={{fontWeight:600,color:"var(--acc)"}}>{c.author}</span>
+              <div style={{display:"flex",gap:6,alignItems:"center"}}><span>{c.time}</span><button style={{...btnSm("var(--red)"),fontSize:10,padding:"0 4px"}} onClick={()=>delComment(t.id,c.id)}>✕</button></div>
+            </div>
+            <div style={{fontSize:13,whiteSpace:"pre-wrap",lineHeight:1.5}}>{c.text}</div>
           </div>)}
           <div style={{display:"flex",gap:6,marginTop:6}}>
-            <textarea style={{...iSt,minHeight:40,resize:"vertical",fontFamily:"inherit",flex:1}} placeholder="Add a comment..." value={newComment} onChange={e=>setNC(e.target.value)} />
-            <button style={{...btn(),padding:"8px 12px",alignSelf:"flex-end"}} onClick={()=>{if(newComment.trim()){addComment(t.id,newComment.trim());setNC("");}}}>Send</button>
+            <textarea style={{...iSt,minHeight:44,resize:"vertical",flex:1}} placeholder="Add a comment…" value={newComment} onChange={e=>setNC(e.target.value)}
+              onKeyDown={e=>{if(e.key==="Enter"&&e.metaKey&&newComment.trim()){addComment(t.id,newComment.trim());setNC("");}}} />
+            <button style={{...btn(),padding:"8px 14px",alignSelf:"flex-end"}} onClick={()=>{if(newComment.trim()){addComment(t.id,newComment.trim());setNC("");}}}>Send</button>
           </div>
         </div>
       </div>
-    </div>;
-  };
-
-  /* ═══ TASK FORM ═══ */
-  const TaskFormModal=()=>{
-    const isE=!!editT?.id;
-    const [f,sF]=useState(editT||{title:"",notes:"",section:"active",priority:"Medium",domain:dNames[0]||"",taskStatus:"Not Started",assignee:people[0]||"",due:"",startDate:"",estimatedHours:"",project:""});
-    const set=(k,v)=>sF({...f,[k]:v});const close=()=>{setShowTF(false);setEditT(null);};
-    return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={close}>
-      <div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:520,maxHeight:"90vh",overflow:"auto"}} onClick={e=>e.stopPropagation()}>
-        <h3 style={{fontSize:16,fontWeight:700,marginBottom:18}}>{isE?"Edit Task":"New Task"}</h3>
-        <div style={{marginBottom:12}}><label style={lSt}>Title *</label><input style={iSt} value={f.title} onChange={e=>set("title",e.target.value)} placeholder="Task title" autoFocus /></div>
-        <div style={{marginBottom:12}}><label style={lSt}>Description / Notes</label><textarea style={{...iSt,minHeight:70,resize:"vertical",fontFamily:"inherit"}} value={f.notes||""} onChange={e=>set("notes",e.target.value)} /></div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-          <div style={{marginBottom:12}}><label style={lSt}>Section</label><select style={sel} value={f.section} onChange={e=>set("section",e.target.value)}>{SECTIONS.map(s=><option key={s} value={s}>{SECTION_META[s].label}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Status</label><select style={sel} value={f.taskStatus||"Not Started"} onChange={e=>set("taskStatus",e.target.value)}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Priority</label><select style={sel} value={f.priority} onChange={e=>set("priority",e.target.value)}>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Domain</label><select style={sel} value={f.domain} onChange={e=>set("domain",e.target.value)}>{dNames.map(d=><option key={d}>{d}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Assignee</label><select style={sel} value={f.assignee} onChange={e=>set("assignee",e.target.value)}><option value="">Unassigned</option>{people.map(p=><option key={p}>{p}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Project</label><select style={sel} value={f.project||""} onChange={e=>set("project",e.target.value)}><option value="">None</option>{projects.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}</select></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Start Date</label><input style={iSt} type="date" value={f.startDate||""} onChange={e=>set("startDate",e.target.value)} /></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Due Date</label><input style={iSt} type="date" value={f.due||""} onChange={e=>set("due",e.target.value)} /></div>
-          <div style={{marginBottom:12}}><label style={lSt}>Est. Hours</label><input style={iSt} type="number" min="0" step="0.5" value={f.estimatedHours||""} onChange={e=>set("estimatedHours",e.target.value)} /></div>
-        </div>
-        <div style={{display:"flex",gap:8,justifyContent:"flex-end",marginTop:6}}>
-          <button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={close}>Cancel</button>
-          <button style={btn()} onClick={()=>{if(f.title.trim()){isE?sEditTask(f):aTask(f);}}}>{isE?"Update":"Add Task"}</button>
-        </div>
-      </div>
-    </div>;
-  };
-
-  /* ═══ DOMAIN MANAGER ═══ */
-  const DomainModal=()=>{
-    const [nn,sNN]=useState("");const [nc,sNC]=useState(COLOR_PRESETS[0].h);
-    const [ei,sEI]=useState(null);const [en,sEN]=useState("");const [ec,sEC]=useState("");
-    return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={()=>setShowDM(false)}>
-      <div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:480,maxHeight:"85vh",overflow:"auto"}} onClick={e=>e.stopPropagation()}>
-        <h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Manage Domains</h3>
-        <p style={{fontSize:12,color:C.mut,marginBottom:16}}>Renaming cascades to all tasks & projects.</p>
-        {domains.map((d,i)=>{const isEd=ei===i;const tc=tasks.filter(t=>t.domain===d.name).length;return<div key={d.name+i} style={{padding:"10px 12px",background:C.sf2,borderRadius:8,marginBottom:6}}>
-          {isEd?<div><div style={{display:"flex",gap:8,marginBottom:8}}><input style={{...iSt,flex:1}} value={en} onChange={e=>sEN(e.target.value)} autoFocus /></div><ColorPicker value={ec} onChange={sEC} /><div style={{display:"flex",gap:6,marginTop:8}}><button style={btn(C.grn,"rgba(62,207,142,0.12)")} onClick={()=>{updDom(d.name,en,ec);sEI(null);}}>Save</button><button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={()=>sEI(null)}>Cancel</button></div></div>
-          :<div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:14,height:14,borderRadius:3,background:d.color,flexShrink:0}} /><span style={{flex:1,fontSize:14,fontWeight:600}}>{d.name}</span><span style={{fontSize:11,color:C.mut}}>{tc}</span><button style={btnSm(C.mut)} onClick={()=>{sEI(i);sEN(d.name);sEC(d.color);}}>✎</button><button style={btnSm(C.red)} onClick={()=>{if(tc>0){if(confirm(`"${d.name}" has ${tc} task(s). Delete?`))rmDom(d.name);}else rmDom(d.name);}}>✕</button></div>}
-        </div>;})}
-        <div style={{marginTop:14,padding:14,background:C.sf2,borderRadius:8,border:`1px dashed ${C.bdr}`}}>
-          <div style={{...lSt,marginBottom:8}}>Add New Domain</div>
-          <div style={{display:"flex",gap:8,marginBottom:8}}><input style={{...iSt,flex:1}} placeholder="Domain name..." value={nn} onChange={e=>sNN(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&nn.trim()){addDom(nn,nc);sNN("");}}} /><button style={btn()} onClick={()=>{if(nn.trim()){addDom(nn,nc);sNN("");}}}>Add</button></div>
-          <ColorPicker value={nc} onChange={sNC} />
-        </div>
-        <button style={{...btn(C.mut,"rgba(139,143,163,0.12)"),width:"100%",marginTop:14}} onClick={()=>setShowDM(false)}>Close</button>
-      </div>
-    </div>;
-  };
-
-  /* ═══ PEOPLE MODAL ═══ */
-  const PeopleModal=()=>{const [n,sN]=useState("");return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={()=>setShowPM(false)}><div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:400,maxHeight:"80vh",overflow:"auto"}} onClick={e=>e.stopPropagation()}>
-    <h3 style={{fontSize:16,fontWeight:700,marginBottom:16}}>Team Members</h3>
-    {people.map(p=><div key={p} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",background:C.sf2,borderRadius:6,marginBottom:4,fontSize:13}}><span>👤 {p}</span><button style={btnSm(C.red)} onClick={()=>rmPerson(p)}>✕</button></div>)}
-    <div style={{display:"flex",gap:6,marginTop:10}}><input style={{...iSt,flex:1}} placeholder="Add member..." value={n} onChange={e=>sN(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&n.trim()){addPerson(n);sN("");}}} /><button style={{...btn(),padding:"8px 12px"}} onClick={()=>{if(n.trim()){addPerson(n);sN("");}}}>Add</button></div>
-    <button style={{...btn(C.mut,"rgba(139,143,163,0.12)"),width:"100%",marginTop:12}} onClick={()=>setShowPM(false)}>Close</button>
-  </div></div>;};
-
-  /* ═══ PROJECT FORM ═══ */
-  const ProjFormModal=()=>{const isE=!!editP?.id;const [f,sF]=useState(editP||{name:"",domain:dNames[0]||"Finance",status:"Active"});const set=(k,v)=>sF({...f,[k]:v});const close=()=>{setShowPF(false);setEditP(null);};return<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={close}><div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:420}} onClick={e=>e.stopPropagation()}>
-    <h3 style={{fontSize:16,fontWeight:700,marginBottom:16}}>{isE?"Edit Project":"New Project"}</h3>
-    <div style={{marginBottom:12}}><label style={lSt}>Name</label><input style={iSt} value={f.name} onChange={e=>set("name",e.target.value)} autoFocus /></div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}><div style={{marginBottom:12}}><label style={lSt}>Domain</label><select style={sel} value={f.domain} onChange={e=>set("domain",e.target.value)}>{dNames.map(d=><option key={d}>{d}</option>)}</select></div><div style={{marginBottom:12}}><label style={lSt}>Status</label><input style={iSt} value={f.status} onChange={e=>set("status",e.target.value)} /></div></div>
-    <div style={{display:"flex",gap:8,justifyContent:"flex-end",marginTop:6}}><button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={close}>Cancel</button><button style={btn()} onClick={()=>{if(f.name.trim())savePrj(f);}}>{isE?"Update":"Add"}</button></div>
-  </div></div>;};
-
-  /* ═══ SETTINGS ═══ */
-  const SettingsModal=()=><div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16}} onClick={()=>setShowSet(false)}><div style={{background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:10,padding:24,width:"100%",maxWidth:420}} onClick={e=>e.stopPropagation()}>
-    <h3 style={{fontSize:16,fontWeight:700,marginBottom:16}}>Settings</h3>
-    <div style={{padding:14,background:C.sf2,borderRadius:8,marginBottom:12}}><div style={{fontSize:12,color:C.mut,marginBottom:4}}>Sync</div><div style={{fontSize:14,fontWeight:600}}>{fbCfg?"☁ Firebase":"💾 Local"}</div>{fbCfg&&<div style={{fontSize:11,color:C.mut,marginTop:4}}>{fbCfg.projectId}</div>}</div>
-    <div style={{padding:14,background:C.sf2,borderRadius:8,marginBottom:12}}><div style={{fontSize:12,color:C.mut,marginBottom:4}}>Data</div><div style={{fontSize:13}}>{tasks.length} tasks • {projects.length} projects • {people.length} members • {domains.length} domains</div></div>
-    <button style={{...btn(C.amb,"rgba(240,180,41,0.12)"),width:"100%",marginBottom:8}} onClick={()=>{const b=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="taskcommand-"+td()+".json";a.click();}}>⬇ Export Backup</button>
-    <button style={{...btn(fbCfg?C.red:C.acc,fbCfg?"rgba(239,100,97,0.12)":"rgba(124,109,240,0.12)"),width:"100%",marginBottom:8}} onClick={()=>{if(fbCfg){if(confirm("Disconnect Firebase and switch to local-only?")){localStorage.removeItem("tc-firebase-config");localStorage.setItem("tc-mode","local");window.location.reload();}}else{localStorage.removeItem("tc-mode");localStorage.removeItem("tc-firebase-config");window.location.reload();}}}>{fbCfg?"Disconnect Firebase":"☁ Connect to Firebase"}</button>
-    <button style={{...btn(C.red,"rgba(239,100,97,0.12)"),width:"100%",marginBottom:12}} onClick={()=>{if(confirm("Reset ALL data?")){save(DEF_STATE);setShowSet(false);}}}>Reset All</button>
-    <button style={{...btn(C.mut,"rgba(139,143,163,0.12)"),width:"100%"}} onClick={()=>setShowSet(false)}>Close</button>
-  </div></div>;
-
-  /* ═══ MAIN RENDER ═══ */
-  return<div style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",background:C.bg,color:C.txt,minHeight:"100vh",padding:"16px 20px"}}>
-    {/* Header */}
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,paddingBottom:12,borderBottom:`1px solid ${C.bdr}`,flexWrap:"wrap",gap:10}}>
-      <div><h1 style={{fontSize:18,fontWeight:700,margin:0}}>⚡ TaskCommand</h1><div style={{fontSize:12,color:C.mut,marginTop:2,display:"flex",alignItems:"center",gap:8}}><span>{tasks.length} tasks • {projects.length} projects</span><SyncBadge status={sync} />{overdue>0&&<span style={{color:C.red}}>⚠ {overdue} overdue</span>}</div></div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}><button style={btn()} onClick={()=>{setEditT(null);setShowTF(true);}}>+ Task</button><button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={()=>setShowPM(true)}>👤</button><button style={btn(C.gold,"rgba(212,168,67,0.12)")} onClick={()=>setShowDM(true)}>◆</button><button style={btn(C.mut,"rgba(139,143,163,0.12)")} onClick={()=>setShowSet(true)}>⚙</button></div>
     </div>
-
-    {/* KPIs */}
-    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:16}}>
-      {SECTIONS.map(s=><div key={s} onClick={()=>setFF("section",flt.section===s?"all":s)} style={{...cSt,cursor:"pointer",borderColor:flt.section===s?SECTION_META[s].color:C.bdr,padding:"12px 14px"}}><div style={{fontSize:10,textTransform:"uppercase",letterSpacing:0.5,color:C.mut}}>{SECTION_META[s].label}</div><div style={{fontSize:24,fontWeight:700,color:SECTION_META[s].color,fontVariantNumeric:"tabular-nums"}}>{counts[s]}</div></div>)}
-    </div>
-
-    {/* Tabs + Filters */}
-    <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8,marginBottom:14,alignItems:"center"}}>
-      <div style={{display:"flex",gap:4}}>{[["board","Board"],["list","List"],["projects","Projects"]].map(([v,l])=><span key={v} onClick={()=>setView(v)} style={{padding:"6px 14px",borderRadius:6,fontSize:13,fontWeight:500,cursor:"pointer",border:`1px solid ${view===v?C.acc:C.bdr}`,background:view===v?"rgba(124,109,240,0.12)":C.sf,color:view===v?C.acc:C.mut}}>{l}</span>)}</div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}}>
-        <input style={{...iSt,width:140,padding:"6px 10px",fontSize:12}} placeholder="Search..." value={flt.search} onChange={e=>setFF("search",e.target.value)} />
-        <select style={{...sel,width:"auto",padding:"6px 8px",fontSize:12}} value={flt.domain} onChange={e=>setFF("domain",e.target.value)}><option value="all">Domain</option>{dNames.map(d=><option key={d}>{d}</option>)}</select>
-        <select style={{...sel,width:"auto",padding:"6px 8px",fontSize:12}} value={flt.assignee} onChange={e=>setFF("assignee",e.target.value)}><option value="all">Assignee</option>{people.map(p=><option key={p}>{p}</option>)}</select>
-        <select style={{...sel,width:"auto",padding:"6px 8px",fontSize:12}} value={flt.priority} onChange={e=>setFF("priority",e.target.value)}><option value="all">Priority</option>{PRIORITIES.map(p=><option key={p}>{p}</option>)}</select>
-        {aFlts>0&&<button style={btnSm(C.red)} onClick={()=>setFlt({section:"all",domain:"all",assignee:"all",status:"all",priority:"all",search:""})}>Clear ({aFlts})</button>}
-      </div>
-    </div>
-
-    {/* Views */}
-    {view==="board"&&<div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:8}}>{SECTIONS.map(s=><Col key={s} section={s} />)}</div>}
-    {view==="list"&&<div style={cSt}>{filtered.length===0?<div style={{textAlign:"center",padding:24,color:C.mut,fontSize:13}}>No tasks match.</div>:filtered.map(t=><TaskCard key={t.id} task={t} />)}</div>}
-    {view==="projects"&&<div style={cSt}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><span style={{fontSize:14,fontWeight:600}}>Projects ({projects.length})</span><button style={{...btn(C.gold,"rgba(212,168,67,0.12)"),padding:"6px 14px",fontSize:12}} onClick={()=>{setEditP(null);setShowPF(true);}}>+ Project</button></div>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}><thead><tr>{["Project","Domain","Status","Tasks",""].map((h,i)=><th key={i} style={{textAlign:"left",padding:"8px 10px",fontWeight:600,color:C.mut,fontSize:11,textTransform:"uppercase",borderBottom:`1px solid ${C.bdr}`}}>{h}</th>)}</tr></thead>
-      <tbody>{projects.map(p=>{const d=gDC(p.domain);const tc=tasks.filter(t=>t.project===p.name).length;return<tr key={p.id}><td style={{padding:10,borderBottom:`1px solid ${C.bdr}`,fontWeight:600}}>{p.name}</td><td style={{padding:10,borderBottom:`1px solid ${C.bdr}`}}><span style={pill(d.c,d.bg)}>{p.domain}</span></td><td style={{padding:10,borderBottom:`1px solid ${C.bdr}`}}>{p.status}</td><td style={{padding:10,borderBottom:`1px solid ${C.bdr}`,color:C.mut}}>{tc}</td><td style={{padding:10,borderBottom:`1px solid ${C.bdr}`}}><button style={btnSm(C.mut)} onClick={()=>{setEditP(p);setShowPF(true);}}>✎</button><button style={btnSm(C.red)} onClick={()=>delPrj(p.id)}>✕</button></td></tr>;})}</tbody></table>
-    </div>}
-
-    {/* Footer */}
-    <div style={{marginTop:16,padding:"8px 14px",background:C.sf,border:`1px solid ${C.bdr}`,borderRadius:8,fontSize:11,color:C.mut,display:"flex",justifyContent:"space-between",alignItems:"center"}}><span>Drag between columns • Click task for detail • Expand subtasks inline</span><SyncBadge status={sync} /></div>
-
-    {/* Modals */}
-    {showTF&&<TaskFormModal />}
-    {detailT&&<DetailPanel />}
-    {showSubForm&&detailT&&<SubFormModal />}
-    {showPF&&<ProjFormModal />}
-    {showPM&&<PeopleModal />}
-    {showDM&&<DomainModal />}
-    {showSet&&<SettingsModal />}
   </div>;
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   PROJECT / PEOPLE / DOMAIN MODALS
+   ═══════════════════════════════════════════════════════════════════ */
+function ProjFormModal({open, onClose, initial, onSave}) {
+  const {dNames} = useApp();
+  const isE = !!initial?.id;
+  const [f, sF] = useState(null);
+  useEffect(() => { if (open) sF(initial || {name:"",domain:dNames[0]||"Finance",status:"Active"}); }, [open, initial]);
+  if (!f) return null;
+  const set = (k,v) => sF({...f, [k]:v});
+  const submit = () => { if (f.name.trim()) onSave(f); };
+  return <Modal open={open} onClose={onClose} title={isE?"Edit Project":"New Project"} width={440}
+    footer={<>
+      <button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Cancel</button>
+      <button onClick={submit} style={btn()}>{isE?"Update":"Add"}</button>
+    </>}>
+    <div style={{marginBottom:12}}><label style={lSt}>Name *</label><input style={iSt} value={f.name} onChange={e=>set("name",e.target.value)} autoFocus /></div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+      <div><label style={lSt}>Domain</label><select style={sel} value={f.domain} onChange={e=>set("domain",e.target.value)}>{dNames.map(d=><option key={d}>{d}</option>)}</select></div>
+      <div><label style={lSt}>Status</label><input style={iSt} value={f.status} onChange={e=>set("status",e.target.value)} placeholder="Active / Recurring / On hold" /></div>
+    </div>
+  </Modal>;
+}
+
+function PeopleModal({open, onClose, onAdd, onRemove}) {
+  const {people} = useApp();
+  const [n, sN] = useState("");
+  return <Modal open={open} onClose={onClose} title="Team Members" width={420}
+    footer={<button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Close</button>}>
+    {people.map(p => <div key={p} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:"var(--sf2)",borderRadius:6,marginBottom:5,fontSize:13}}>
+      <span>👤 {p}</span>
+      <button style={btnSm("var(--red)")} onClick={()=>onRemove(p)}>✕</button>
+    </div>)}
+    <div style={{display:"flex",gap:6,marginTop:12}}>
+      <input style={{...iSt,flex:1}} placeholder="Add member…" value={n} onChange={e=>sN(e.target.value)}
+        onKeyDown={e=>{if(e.key==="Enter"&&n.trim()){onAdd(n);sN("");}}} />
+      <button style={btn()} onClick={()=>{if(n.trim()){onAdd(n);sN("");}}}>Add</button>
+    </div>
+  </Modal>;
+}
+
+function DomainModal({open, onClose, onAdd, onUpdate, onRemove}) {
+  const {domains, tasks} = useApp();
+  const [nn, sNN] = useState("");
+  const [nc, sNC] = useState(COLOR_PRESETS[0].h);
+  const [ei, sEI] = useState(null);
+  const [en, sEN] = useState("");
+  const [ec, sEC] = useState("");
+  return <Modal open={open} onClose={onClose} title="Manage Domains" width={500}
+    footer={<button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Close</button>}>
+    <p style={{fontSize:12,color:"var(--mut)",marginBottom:16}}>Renaming cascades to all tasks & projects.</p>
+    {domains.map((d, i) => {
+      const isEd = ei === i;
+      const tc = tasks.filter(t => t.domain === d.name).length;
+      return <div key={d.name+i} style={{padding:"12px 14px",background:"var(--sf2)",borderRadius:8,marginBottom:6}}>
+        {isEd ? <div>
+          <div style={{display:"flex",gap:8,marginBottom:10}}><input style={{...iSt,flex:1}} value={en} onChange={e=>sEN(e.target.value)} autoFocus /></div>
+          <ColorPicker value={ec} onChange={sEC} />
+          <div style={{display:"flex",gap:6,marginTop:10}}>
+            <button style={btn("var(--grn)","62,207,142")} onClick={()=>{onUpdate(d.name,en,ec);sEI(null);}}>Save</button>
+            <button style={btn("var(--mut)","139,143,163")} onClick={()=>sEI(null)}>Cancel</button>
+          </div>
+        </div> : <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <div style={{width:14,height:14,borderRadius:3,background:d.color,flexShrink:0}} />
+          <span style={{flex:1,fontSize:14,fontWeight:600}}>{d.name}</span>
+          <span className="tabnum" style={{fontSize:11,color:"var(--mut)"}}>{tc}</span>
+          <button style={btnSm("var(--mut)")} onClick={()=>{sEI(i);sEN(d.name);sEC(d.color);}}>✎</button>
+          <button style={btnSm("var(--red)")} onClick={()=>onRemove(d.name)}>✕</button>
+        </div>}
+      </div>;
+    })}
+    <div style={{marginTop:14,padding:14,background:"var(--sf2)",borderRadius:8,border:"1px dashed var(--bdr)"}}>
+      <div style={{...lSt,marginBottom:8}}>Add Domain</div>
+      <div style={{display:"flex",gap:8,marginBottom:10}}>
+        <input style={{...iSt,flex:1}} placeholder="Domain name…" value={nn} onChange={e=>sNN(e.target.value)}
+          onKeyDown={e=>{if(e.key==="Enter"&&nn.trim()){onAdd(nn,nc);sNN("");}}} />
+        <button style={btn()} onClick={()=>{if(nn.trim()){onAdd(nn,nc);sNN("");}}}>Add</button>
+      </div>
+      <ColorPicker value={nc} onChange={sNC} />
+    </div>
+  </Modal>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SETTINGS MODAL
+   ═══════════════════════════════════════════════════════════════════ */
+function SettingsModal({open, onClose, onSignOut, onReconfigureFirebase, onManagePeople, onManageDomains, exportBackup, exportCsv, theme, setTheme}) {
+  const {user, tasks, projects, people, domains, save, data, confirm, toast} = useApp();
+  const importRef = useRef(null);
+  const doImport = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = async () => {
+      try {
+        const parsed = JSON.parse(r.result);
+        if (!parsed.tasks) throw new Error("Not a valid TaskCommand backup");
+        if (!await confirm({title:"Import backup?", message:`This will REPLACE all current data with the backup (${(parsed.tasks||[]).length} tasks). Continue?`, danger:true})) return;
+        save(parsed, {immediate:true});
+        toast("Backup imported", {type:"success"});
+        onClose();
+      } catch (err) { toast("Import failed: "+err.message, {type:"error"}); }
+    };
+    r.readAsText(f);
+    e.target.value = "";
+  };
+  const resetAll = async () => {
+    if (!await confirm({title:"Reset all data?", message:"This will delete ALL tasks, projects, and history. Cannot be undone. Export a backup first.", danger:true})) return;
+    save({tasks:[], projects:DEF_PROJECTS.map(p=>({...p,id:uid()})), people:[user.displayName||"Me"], domains:DEF_DOMAINS, savedViews:SAVED_VIEW_DEFAULTS, activity:[{id:uid(),type:"reset",time:nowIso(),detail:"Workspace reset"}]}, {immediate:true});
+    toast("Workspace reset", {type:"warn"});
+    onClose();
+  };
+  return <Modal open={open} onClose={onClose} title="Settings" width={520}
+    footer={<button onClick={onClose} style={btn("var(--mut)","139,143,163")}>Close</button>}>
+
+    <div style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"var(--sf2)",borderRadius:8,marginBottom:16}}>
+      <div style={{width:44,height:44,borderRadius:"50%",background:"var(--acc)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,backgroundImage:user.photoURL?`url(${user.photoURL})`:"none",backgroundSize:"cover"}}>
+        {!user.photoURL && (user.displayName||user.email||"U").slice(0,1).toUpperCase()}
+      </div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontWeight:700}}>{user.displayName||"—"}</div>
+        <div style={{fontSize:12,color:"var(--mut)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.email}</div>
+      </div>
+      <button style={btn("var(--mut)","139,143,163")} onClick={onSignOut}>Sign Out</button>
+    </div>
+
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+      <div style={{padding:14,background:"var(--sf2)",borderRadius:8}}>
+        <div style={{fontSize:11,color:"var(--mut)",marginBottom:4,textTransform:"uppercase",letterSpacing:0.5,fontWeight:700}}>Workspace</div>
+        <div style={{fontSize:13,lineHeight:1.7}}>
+          <div className="tabnum">{tasks.length} tasks</div>
+          <div className="tabnum">{projects.length} projects</div>
+          <div className="tabnum">{people.length} people</div>
+          <div className="tabnum">{domains.length} domains</div>
+        </div>
+      </div>
+      <div style={{padding:14,background:"var(--sf2)",borderRadius:8}}>
+        <div style={{fontSize:11,color:"var(--mut)",marginBottom:4,textTransform:"uppercase",letterSpacing:0.5,fontWeight:700}}>App</div>
+        <div style={{fontSize:13,lineHeight:1.7}}>
+          <div>Version {APP_VERSION}</div>
+          <div>Theme: <button onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{color:"var(--acc)",textDecoration:"underline",fontSize:13,padding:0}}>{theme==="dark"?"Dark":"Light"}</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div style={{display:"grid",gap:8,marginBottom:16}}>
+      <button onClick={onManagePeople} style={btn("var(--mut)","139,143,163")}>👤 Manage Team Members</button>
+      <button onClick={onManageDomains} style={btn("var(--gold)","212,168,67")}>◆ Manage Domains</button>
+    </div>
+
+    <div style={{display:"grid",gap:8,marginBottom:16}}>
+      <button onClick={exportBackup} style={btn("var(--acc)","124,109,240")}>⬇ Export Full Backup (JSON)</button>
+      <button onClick={exportCsv} style={btn("var(--tel)","56,190,201")}>⬇ Export Tasks (CSV)</button>
+      <label style={{...btn("var(--mut)","139,143,163"),display:"inline-block",textAlign:"center",cursor:"pointer"}}>
+        ⬆ Import Backup (JSON)
+        <input ref={importRef} type="file" accept=".json" onChange={doImport} style={{display:"none"}} />
+      </label>
+    </div>
+
+    <details style={{padding:14,background:"var(--sf2)",borderRadius:8,marginBottom:8}}>
+      <summary style={{fontSize:13,fontWeight:700,cursor:"pointer",listStyle:"none",display:"flex",justifyContent:"space-between"}}>Danger Zone <span style={{color:"var(--mut)"}}>▾</span></summary>
+      <div style={{marginTop:12,display:"grid",gap:8}}>
+        <button onClick={onReconfigureFirebase} style={btn("var(--amb)","240,180,41")}>⚙ Reconfigure Firebase</button>
+        <button onClick={resetAll} style={btn("var(--red)","239,100,97")}>⚠ Reset All Data</button>
+      </div>
+    </details>
+  </Modal>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMMAND PALETTE (⌘K)
+   ═══════════════════════════════════════════════════════════════════ */
+function CommandPalette({open, onClose, setView, actions}) {
+  const {tasks, setDetailT} = useApp();
+  const [q, setQ] = useState("");
+  const [idx, setIdx] = useState(0);
+  useEffect(() => { if (open) { setQ(""); setIdx(0); } }, [open]);
+  const commands = useMemo(() => {
+    const base = [
+      {label:"New task",       hint:"n", act:actions.newTask},
+      {label:"Go to Dashboard",hint:"1", act:()=>setView("dashboard")},
+      {label:"Go to Board",    hint:"2", act:()=>setView("board")},
+      {label:"Go to List",     hint:"3", act:()=>setView("list")},
+      {label:"Go to Calendar", hint:"4", act:()=>setView("calendar")},
+      {label:"Go to Projects", hint:"5", act:()=>setView("projects")},
+      {label:"Go to Reports",  hint:"6", act:()=>setView("reports")},
+      {label:"Toggle theme",   hint:"",  act:actions.theme},
+      {label:"Export CSV",     hint:"",  act:actions.export},
+      {label:"Export backup",  hint:"",  act:actions.backup},
+      {label:"Manage people",  hint:"",  act:actions.people},
+      {label:"Manage domains", hint:"",  act:actions.domains},
+      {label:"Settings",       hint:"",  act:actions.settings},
+      {label:"Sign out",       hint:"",  act:actions.signOut}
+    ];
+    const search = q.toLowerCase();
+    const filtered = search ? base.filter(c => c.label.toLowerCase().includes(search)) : base;
+    const taskMatches = q ? tasks.filter(t => t.title.toLowerCase().includes(search)).slice(0,6).map(t => ({
+      label:`Open: ${t.title}`, hint:"task", act:()=>setDetailT(t)
+    })) : [];
+    return [...filtered, ...taskMatches];
+  }, [q, tasks, actions, setView, setDetailT]);
+  useEffect(() => { setIdx(0); }, [q]);
+  const onKey = e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); setIdx(i => Math.min(i+1, commands.length-1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setIdx(i => Math.max(i-1, 0)); }
+    else if (e.key === "Enter") { e.preventDefault(); commands[idx]?.act(); onClose(); }
+  };
+  return <Modal open={open} onClose={onClose} width={520}>
+    <input autoFocus placeholder="Type a command or task…" value={q} onChange={e=>setQ(e.target.value)} onKeyDown={onKey}
+      style={{...iSt,fontSize:15,padding:"12px 14px",marginBottom:12}} />
+    <div style={{maxHeight:340,overflow:"auto"}}>
+      {commands.map((c, i) => <div key={i} onClick={()=>{c.act();onClose();}}
+        style={{padding:"10px 12px",borderRadius:6,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",background:idx===i?"var(--sf2)":"transparent"}}
+        onMouseEnter={()=>setIdx(i)}>
+        <span style={{fontSize:13.5,fontWeight:600}}>{c.label}</span>
+        {c.hint && <kbd>{c.hint}</kbd>}
+      </div>)}
+      {commands.length === 0 && <div style={{padding:20,color:"var(--mut)",textAlign:"center",fontSize:13}}>No matches</div>}
+    </div>
+    <div style={{marginTop:12,paddingTop:12,borderTop:"1px solid var(--bdr)",fontSize:11,color:"var(--mut)",display:"flex",gap:14}}>
+      <span><kbd>↑↓</kbd> Navigate</span><span><kbd>↵</kbd> Select</span><span><kbd>Esc</kbd> Close</span>
+    </div>
+  </Modal>;
+}
+
+function ShortcutsModal({open, onClose}) {
+  const shortcuts = [
+    {k:"⌘K / Ctrl+K",l:"Command palette"},
+    {k:"/",l:"Focus search"},
+    {k:"n",l:"New task"},
+    {k:"?",l:"Show this help"},
+    {k:"Esc",l:"Close modal / clear focus"},
+    {k:"1-6",l:"Switch views"},
+    {k:"⌘↵ / Ctrl↵",l:"Submit forms & comments"}
+  ];
+  return <Modal open={open} onClose={onClose} title="Keyboard Shortcuts" width={420}
+    footer={<button onClick={onClose} style={btn()}>Got it</button>}>
+    <div style={{display:"grid",gap:10}}>
+      {shortcuts.map(s => <div key={s.k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",background:"var(--sf2)",borderRadius:6}}>
+        <span style={{fontSize:13}}>{s.l}</span>
+        <kbd>{s.k}</kbd>
+      </div>)}
+    </div>
+  </Modal>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOUNT
+   ═══════════════════════════════════════════════════════════════════ */
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
